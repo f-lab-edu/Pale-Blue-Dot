@@ -1,11 +1,11 @@
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql:/localhost:3306/pbd?serverTimezone=UTC&characterEncoding=UTF-8
-    username: luke
+    url: jdbc:mysql://localhost:3306/pbd?serverTimezone=UTC&characterEncoding=UTF-8
+    username: root
     password: 0000
 
-  j
+  jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     database: mysql
     open-in-view: true
