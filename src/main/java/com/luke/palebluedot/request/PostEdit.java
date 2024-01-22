@@ -9,12 +9,12 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class PostCreate {
+public class PostEdit {
     @NotBlank(message = "내용을 입력해주세요")
     private String content;
 
     @Builder
-    public PostCreate(String content, String filePath) {
+    public PostEdit(String content, String filePath) {
         this.content = content;
     }
 }
