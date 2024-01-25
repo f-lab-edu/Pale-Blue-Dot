@@ -1,26 +1,27 @@
-package com.luke.palebluedot.response;
+package com.luke.palebluedot.request;
 
-import com.luke.palebluedot.domain.Post;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
-public class PostResponse {
+public class PostRequest {
 
-    private Long id;
+    @NotBlank(message = "내용을 입력해주세요")
     private String content;
     private LocalDateTime createDate;
     private LocalDateTime updateDate;
     private int likeCount;
+    private String useYn;
 
     @Builder
-    public PostResponse(Long id, String content, LocalDateTime createDate, LocalDateTime updateDate, int likeCount) {
-        this.id = id;
+    public PostRequest(String content, LocalDateTime createDate, LocalDateTime updateDate, int likeCount, String useYn) {
         this.content = content.substring(0, Math.min(content.length(), 10));
         this.createDate = createDate;
         this.updateDate = updateDate;
         this.likeCount = likeCount;
+        this.useYn = useYn;
     }
 }

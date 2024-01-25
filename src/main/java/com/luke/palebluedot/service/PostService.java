@@ -1,7 +1,6 @@
 package com.luke.palebluedot.service;
 
 import com.luke.palebluedot.domain.Post;
-import com.luke.palebluedot.domain.PostEditor;
 import com.luke.palebluedot.repository.PostRepository;
 import com.luke.palebluedot.request.PostCreate;
 import com.luke.palebluedot.request.PostEdit;
@@ -11,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,9 +22,12 @@ public class PostService {
     private final PostRepository postRepository;
 
     public void write(PostCreate postCreate) {
-        //postcreate를 entity로 변경 필요
+        LocalDateTime now = LocalDateTime.now();
+
         Post post = Post.builder()
                 .content(postCreate.getContent())
+                .createDate(now)
+                .useYn("Y")
                 .build();
 
         postRepository.save(post);
@@ -41,7 +44,7 @@ public class PostService {
                 .build();
     }
 
-    public List<PostResponse> getList(Pageable pageable) {
+    public List<PostResponse> getPosts(Pageable pageable) {
         return postRepository.findAll(pageable).stream()
                 .map(post -> PostResponse.builder()
                         .id(post.getId())
