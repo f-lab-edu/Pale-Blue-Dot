@@ -7,34 +7,42 @@ import com.luke.palebluedot.service.PostService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
-import static org.mockito.BDDMockito.given
 import spock.lang.Specification
 
-@SpringBootTest
-public class ServiceSpecification extends Specification{
 
-    @Autowired
+public class ServiceSpecification extends Specification {
+
     PostService postService
-    @MockBean(name = "postRepository")
-    PostRepository postRepository
+    PostRepository postRepository = Mock()
 
-    /*def setup(){
-        //postRepository.save();
+    def setup() {
+        postService = new PostService(postRepository)
     }
 
-    def cleanup(){
+    def cleanup() {
         postRepository.deleteAll();
-    }*/
+    }
 
-    def "postGetTest"() {
+    def "getPost - 성공시 내용 조회 확인"() {
         given:
-        long userId = 1
-        given(postRepository.findById(userId))
-            .willReturn(Post.builder().content("test").build())
+        Long postId = 1L
+
         when:
-        PostResponse postResponse = postService.getPost(userId)
+        PostResponse postResponse = postService.getPost(postId)
 
         then:
-        postResponse.getContent() == "test"
+        postResponse.getContent() == expected
+        postResponse.getId() == postId
+
+        and:
+        1 * postRepository.findById(_) >> Optional.of(createPost(postId, content))
+
+        where:
+        content || expected
+        "test"  || "test"
+    }
+
+    def createPost(Long postId, String content = "test") {
+        return new Post(id: postId, content: content)
     }
 }

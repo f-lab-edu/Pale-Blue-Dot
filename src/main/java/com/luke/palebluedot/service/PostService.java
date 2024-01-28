@@ -1,5 +1,6 @@
 package com.luke.palebluedot.service;
 
+import com.luke.palebluedot.domain.Member;
 import com.luke.palebluedot.domain.Post;
 import com.luke.palebluedot.repository.PostRepository;
 import com.luke.palebluedot.request.PostCreate;
@@ -7,6 +8,7 @@ import com.luke.palebluedot.request.PostEdit;
 import com.luke.palebluedot.response.PostResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -16,30 +18,25 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class PostService {
 
-    private final PostRepository postRepository;
+    private PostRepository postRepository;
 
-    public void write(PostCreate postCreate) {
-        LocalDateTime now = LocalDateTime.now();
-
+    public void write(PostCreate postCreate, Long memberId) {
         Post post = Post.builder()
                 .content(postCreate.getContent())
-                .createDate(now)
-                .useYn("Y")
+                .memberId(memberId)
                 .build();
-
         postRepository.save(post);
 
     }
 
-    public PostResponse getPost(Long id) {
-        Post post = postRepository.findById(id)
-                .orElseThrow(()->new IllegalArgumentException("아이디가 없습니다."));
+    public PostResponse getPost(Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(()->new IllegalArgumentException("게시글이 없습니다."));
 
         return PostResponse.builder()
-                .id(post.getId())
+                .postId(post.getPostId())
                 .content(post.getContent())
                 .build();
     }
@@ -47,18 +44,22 @@ public class PostService {
     public List<PostResponse> getPosts(Pageable pageable) {
         return postRepository.findAll(pageable).stream()
                 .map(post -> PostResponse.builder()
-                        .id(post.getId())
+                        .postId(post.getPostId())
                         .content(post.getContent())
                         .build())
                 .collect(Collectors.toList());
     }
 
-    public void edit(Long id, PostEdit postEdit){
-        Post post = postRepository.findById(id)
+    public void postEdit(Long postId, PostEdit postEdit){
+        Post post = postRepository.findById(postId)
                 .orElseThrow(()->new IllegalArgumentException("아이디가 없습니다."));
 
         //어떻게 setter 없이 수정된 데이터를 넘겨줄 수 있을까?
         //post.setContent(postEdit.getContent());
         //postRepository.save(post);
+    }
+
+    public void deletePost(Long postId) {
+        postRepository.deleteById(postId);
     }
 }

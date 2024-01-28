@@ -9,15 +9,15 @@ import java.time.LocalDateTime;
 @Getter
 public class PostResponse {
 
-    private Long id;
+    private Long postId;
     private String content;
     private LocalDateTime createDate;
     private LocalDateTime updateDate;
     private int likeCount;
 
     @Builder
-    public PostResponse(Long id, String content, LocalDateTime createDate, LocalDateTime updateDate, int likeCount) {
-        this.id = id;
+    public PostResponse(Long postId, String content, LocalDateTime createDate, LocalDateTime updateDate, int likeCount) {
+        this.postId = postId;
         this.content = content.substring(0, Math.min(content.length(), 10));
         this.createDate = createDate;
         this.updateDate = updateDate;

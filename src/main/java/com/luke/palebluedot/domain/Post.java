@@ -5,9 +5,13 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+
+import static jakarta.persistence.FetchType.LAZY;
 
 @Getter
 @Entity
@@ -17,26 +21,30 @@ public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "POST_ID")
-    private Long id;
+    private Long postId;
+
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "MEMBER_ID")
+    private Member member;
 
     @Lob
     @Column(name = "POST_CONTENT")
     private String content;
-    @Column(name = "CREATE_DATE")
-    private LocalDateTime createDate;
-    @Column(name = "UPDATE_DATE")
-    private LocalDateTime updateDate;
-    @Column(name = "LIKE_COUNT")
-    private int likeCount;
-    @Column(name = "USEY_YN")
-    private String useYn;
 
+    @Column(name = "CREATE_DATE")
+    @CreatedDate
+    private LocalDateTime createDate;
+
+    @Column(name = "UPDATE_DATE")
+    @LastModifiedDate
+    private LocalDateTime updateDate;
+
+    @Column(name = "LIKE_COUNT")
+    private Integer likeCount;
 
     @Builder
-    public Post(String content, LocalDateTime createDate, LocalDateTime updateDate, String useYn) {
+    public Post(String content, Long memberId) {
         this.content = content;
-        this.createDate = createDate;
-        this.updateDate = updateDate;
-        this.useYn = useYn;
+        Member.builder().memberId(memberId).build();
     }
 }

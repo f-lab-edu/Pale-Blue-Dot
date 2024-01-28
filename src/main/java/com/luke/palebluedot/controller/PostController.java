@@ -22,8 +22,8 @@ public class PostController {
     private PostService postService;
 
     @PostMapping
-    public void posts(@RequestBody @Valid PostCreate request){
-        postService.write(request);
+    public void createPost(@RequestBody @Valid PostCreate request, @PathVariable Long memberId){
+        postService.write(request, memberId);
     }
 
 
@@ -33,13 +33,18 @@ public class PostController {
     }
 
     @GetMapping
-    public List<PostResponse> getList(@PageableDefault Pageable pageable){
+    public List<PostResponse> getPosts(@PageableDefault Pageable pageable){
         return postService.getPosts(pageable);
     }
 
     @PatchMapping("/{postId}")
-    public void edit(@PathVariable Long postId, @RequestBody @Valid PostEdit request) {
-        postService.edit(postId, request);
+    public void editPost(@PathVariable Long postId, @RequestBody @Valid PostEdit request) {
+        postService.postEdit(postId, request);
+    }
+
+    @DeleteMapping("/{postId}")
+    public void deletePost(@PathVariable Long postId) {
+        postService.deletePost(postId);
     }
 
 }
