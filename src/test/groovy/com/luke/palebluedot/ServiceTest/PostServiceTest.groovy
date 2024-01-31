@@ -1,16 +1,13 @@
-package com.luke.palebluedot.ServiceSpecification
+package com.luke.palebluedot.ServiceTest
 
 import com.luke.palebluedot.domain.Post
 import com.luke.palebluedot.repository.PostRepository
 import com.luke.palebluedot.response.PostResponse
 import com.luke.palebluedot.service.PostService
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import spock.lang.Specification
 
 
-public class ServiceSpecification extends Specification {
+public class PostServiceTest extends Specification {
 
     PostService postService
     PostRepository postRepository = Mock()
@@ -32,7 +29,7 @@ public class ServiceSpecification extends Specification {
 
         then:
         postResponse.getContent() == expected
-        postResponse.getId() == postId
+        postResponse.getPostId() == postId
 
         and:
         1 * postRepository.findById(_) >> Optional.of(createPost(postId, content))

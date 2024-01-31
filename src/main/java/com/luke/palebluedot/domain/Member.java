@@ -43,10 +43,11 @@ public class Member {
     private List<Post> posts = new ArrayList<>();
 
     @Builder
-    public Member(Long memberId, String password, String memberName, String email){
+    public Member(Long memberId, String password, String memberName, String email, List<Post> posts){
         this.memberId = memberId;
         this.password = password;
         this.memberName = memberName;
         this.email = email;
+        this.posts = posts;
     }
 }

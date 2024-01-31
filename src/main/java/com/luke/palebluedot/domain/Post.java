@@ -43,8 +43,8 @@ public class Post {
     private Integer likeCount;
 
     @Builder
-    public Post(String content, Long memberId) {
+    public Post(String content, Member member) {
         this.content = content;
-        Member.builder().memberId(memberId).build();
+        this.member = member;
     }
 }

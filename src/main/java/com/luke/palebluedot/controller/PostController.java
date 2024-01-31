@@ -1,9 +1,15 @@
 package com.luke.palebluedot.controller;
 
+import com.luke.palebluedot.domain.Post;
 import com.luke.palebluedot.request.PostCreate;
 import com.luke.palebluedot.request.PostEdit;
 import com.luke.palebluedot.response.PostResponse;
 import com.luke.palebluedot.service.PostService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +34,12 @@ public class PostController {
 
 
     @GetMapping("/{postId}")
+    @Operation(summary = "Get Post", description = "특정 게시글 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "성공",
+                    content = {@Content(schema = @Schema(implementation = Post.class))}),
+            @ApiResponse(responseCode = "404", description = "해당 ID의 게시글이 존재하지 않습니다."),
+    })
     public PostResponse getPost(@PathVariable Long postId){
         return postService.getPost(postId);
     }

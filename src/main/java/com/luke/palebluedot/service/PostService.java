@@ -23,9 +23,11 @@ public class PostService {
     private PostRepository postRepository;
 
     public void write(PostCreate postCreate, Long memberId) {
+        Member member = Member.builder().memberId(memberId).build();
+
         Post post = Post.builder()
                 .content(postCreate.getContent())
-                .memberId(memberId)
+                .member(member)
                 .build();
         postRepository.save(post);
 
