@@ -9,19 +9,18 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 import static jakarta.persistence.FetchType.LAZY;
 
 @Getter
 @Entity
 @NoArgsConstructor(access= AccessLevel.PUBLIC)
-public class Post {
+public class Feed {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "POST_ID")
-    private Long postId;
+    @Column(name = "FEED_ID")
+    private Long feedId;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "MEMBER_ID")
@@ -43,7 +42,7 @@ public class Post {
     private Integer likeCount;
 
     @Builder
-    public Post(String content, Member member) {
+    public Feed(String content, Member member) {
         this.content = content;
         this.member = member;
     }

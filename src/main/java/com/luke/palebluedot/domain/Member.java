@@ -40,14 +40,14 @@ public class Member {
     private LocalDateTime updateDate;
 
     @OneToMany(mappedBy = "member")
-    private List<Post> posts = new ArrayList<>();
+    private List<Feed> feeds = new ArrayList<>();
 
     @Builder
-    public Member(Long memberId, String password, String memberName, String email, List<Post> posts){
+    public Member(Long memberId, String password, String memberName, String email, List<Feed> feeds){
         this.memberId = memberId;
         this.password = password;
         this.memberName = memberName;
         this.email = email;
-        this.posts = posts;
+        this.feeds = feeds;
     }
 }

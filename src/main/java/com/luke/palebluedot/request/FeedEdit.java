@@ -3,15 +3,13 @@ package com.luke.palebluedot.request;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
-
 @Getter
-public class PostEdit {
+public class FeedEdit {
     private final String content;
-    private int likeCount;
+    private final Integer likeCount;
 
     @Builder
-    public PostEdit(String content, int likeCount) {
+    public FeedEdit(String content, Integer likeCount) {
         this.content = content;
         this.likeCount = likeCount;
     }
