@@ -22,17 +22,17 @@ public class MemberController {
     }
 
     @GetMapping("/{memberId}")
-    public MemberResponse getMember(@PathVariable Long memberId) {
+    public MemberResponse getMember(@PathVariable String memberId) {
         return memberService.getMember(memberId);
     }
 
     @PatchMapping("/{memberId}")
-    public void editMember(@PathVariable Long memberId, @RequestBody @Valid MemberEdit request) {
+    public void editMember(@PathVariable String memberId, @RequestBody @Valid MemberEdit request) {
         memberService.editMember(memberId, request);
     }
 
     @DeleteMapping("/{memberId}")
-    public void deleteMember(@PathVariable Long memberId) {
+    public void deleteMember(@PathVariable String memberId) {
         memberService.deleteMember(memberId);
     }
 }

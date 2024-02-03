@@ -24,10 +24,11 @@ public class MemberService {
                 .memberName(memberCreate.getMemberName())
                 .email(memberCreate.getEmail())
                 .build();
+        memberRepository.save(member);
     }
 
-    public MemberResponse getMember(Long memberId) {
-        Member member = memberRepository.findById(memberId)
+    public MemberResponse getMember(String memberId) {
+        Member member = memberRepository.findByMemberId(memberId)
                 .orElseThrow(()->new IllegalArgumentException("회원정보가 없습니다."));
 
         return MemberResponse.builder()
@@ -38,12 +39,12 @@ public class MemberService {
     }
 
 
-    public void editMember(Long memberId, MemberEdit memberEdit) {
-        Member member = memberRepository.findById(memberId)
+    public void editMember(String memberId, MemberEdit memberEdit) {
+        Member member = memberRepository.findByMemberId(memberId)
                 .orElseThrow(()->new IllegalArgumentException("아이디가 없습니다."));
     }
 
-    public void deleteMember(Long memberId) {
-        memberRepository.deleteById(memberId);
+    public void deleteMember(String memberId) {
+        memberRepository.deleteByMemberId(memberId);
     }
 }
