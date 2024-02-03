@@ -23,7 +23,7 @@ public class FeedService {
         this.feedRepository = feedRepository;
     }
 
-    public void write(FeedCreate feedCreate, Long memberId) {
+    public void write(FeedCreate feedCreate, String memberId) {
         Member member = Member.builder().memberId(memberId).build();
 
         Feed feed = Feed.builder()

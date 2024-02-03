@@ -28,7 +28,7 @@ public class FeedController {
     private FeedService feedService;
 
     @PostMapping
-    public void createFeed(@RequestBody @Valid FeedCreate request, @PathVariable Long memberId){
+    public void createFeed(@RequestBody @Valid FeedCreate request, @PathVariable String memberId){
         feedService.write(request, memberId);
     }
 
