@@ -44,21 +44,19 @@ public class FeedService {
                 .build();
     }
 
-    public List<FeedResponse> getFeeds(Pageable pageable) {
-        return feedRepository.findAll(pageable).stream()
-                .map(feed -> FeedResponse.builder()
-                        .feedId(feed.getFeedId())
-                        .content(feed.getContent())
-                        .build())
-                .collect(Collectors.toList());
-    }
 
-    public void feedEdit(Long feedId, FeedEdit feedEdit){
-        Feed feed = feedRepository.findById(feedId)
+    public void editFeed(Long feedId, FeedEdit feedEdit){
+        Feed existingFeed = feedRepository.findById(feedId)
                 .orElseThrow(()->new IllegalArgumentException("아이디가 없습니다."));
+        Feed changedFeed = existingFeed.builder()
+                .content(feedEdit.getContent())
+                .build();
+        feedRepository.save(changedFeed);
     }
 
     public void deleteFeed(Long feedId) {
         feedRepository.deleteById(feedId);
     }
+
+
 }

@@ -26,6 +26,7 @@ public class MemberController {
         return memberService.getMember(memberId);
     }
 
+
     @PatchMapping("/{memberId}")
     public void editMember(@PathVariable String memberId, @RequestBody @Valid MemberEdit request) {
         memberService.editMember(memberId, request);

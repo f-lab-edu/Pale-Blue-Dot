@@ -44,14 +44,9 @@ public class FeedController {
         return feedService.getFeed(feedId);
     }
 
-    @GetMapping
-    public List<FeedResponse> getFeeds(@PageableDefault Pageable pageable){
-        return feedService.getFeeds(pageable);
-    }
-
     @PatchMapping("/{feedId}")
     public void editFeed(@PathVariable Long feedId, @RequestBody @Valid FeedEdit request) {
-        feedService.feedEdit(feedId, request);
+        feedService.editFeed(feedId, request);
     }
 
     @DeleteMapping("/{feedId}")
