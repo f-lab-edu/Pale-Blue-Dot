@@ -27,7 +27,7 @@ public class Feed {
     private Member member;
 
     @Lob
-    @Column(name = "POST_CONTENT")
+    @Column(name = "FEED_CONTENT")
     private String content;
 
     @Column(name = "CREATE_DATE")

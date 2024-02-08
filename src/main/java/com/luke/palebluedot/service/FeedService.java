@@ -2,29 +2,45 @@ package com.luke.palebluedot.service;
 
 import com.luke.palebluedot.domain.Member;
 import com.luke.palebluedot.domain.Feed;
+import com.luke.palebluedot.domain.QFeed;
 import com.luke.palebluedot.repository.FeedRepository;
+import com.luke.palebluedot.repository.MemberRepository;
 import com.luke.palebluedot.request.FeedCreate;
 import com.luke.palebluedot.request.FeedEdit;
 import com.luke.palebluedot.response.FeedResponse;
+import com.querydsl.core.QueryResults;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@Transactional
 public class FeedService {
 
     private final FeedRepository feedRepository;
+    private final MemberRepository memberRepository;
+    private final EntityManager em;
+    private final JPAQueryFactory queryFactory;
+    private final QFeed qFeed;
 
-    public FeedService(FeedRepository feedRepository) {
+    public FeedService(FeedRepository feedRepository, MemberRepository memberRepository, EntityManager em) {
         this.feedRepository = feedRepository;
+        this.memberRepository = memberRepository;
+        this.em = em;
+        this.queryFactory = new JPAQueryFactory(em);
+        this.qFeed = QFeed.feed;
     }
 
-    public void write(FeedCreate feedCreate, String memberId) {
-        Member member = Member.builder().memberId(memberId).build();
+    public void createFeed(FeedCreate feedCreate, String memberId) {
+        Member member = memberRepository.findByMemberId(memberId)
+                .orElseThrow(()->new IllegalArgumentException("회원 정보가 없습니다."));
 
         Feed feed = Feed.builder()
                 .content(feedCreate.getContent())
@@ -44,6 +60,12 @@ public class FeedService {
                 .build();
     }
 
+    public QueryResults<Feed> getFeeds(int page, int size){
+        return queryFactory.selectFrom(qFeed)
+                .offset(page * size)
+                .limit(size)
+                .fetchResults();
+    }
 
     public void editFeed(Long feedId, FeedEdit feedEdit){
         Feed existingFeed = feedRepository.findById(feedId)

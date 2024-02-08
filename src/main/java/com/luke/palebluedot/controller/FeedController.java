@@ -5,6 +5,7 @@ import com.luke.palebluedot.request.FeedCreate;
 import com.luke.palebluedot.request.FeedEdit;
 import com.luke.palebluedot.response.FeedResponse;
 import com.luke.palebluedot.service.FeedService;
+import com.querydsl.core.QueryResults;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -29,7 +30,7 @@ public class FeedController {
 
     @PostMapping
     public void createFeed(@RequestBody @Valid FeedCreate request, @PathVariable String memberId){
-        feedService.write(request, memberId);
+        feedService.createFeed(request, memberId);
     }
 
 
@@ -43,6 +44,15 @@ public class FeedController {
     public FeedResponse getFeed(@PathVariable Long feedId){
         return feedService.getFeed(feedId);
     }
+
+    @GetMapping
+    public QueryResults<Feed> getFeeds(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size){
+        QueryResults<Feed> feeds = feedService.getFeeds(page, size);
+        return feeds;
+    }
+
 
     @PatchMapping("/{feedId}")
     public void editFeed(@PathVariable Long feedId, @RequestBody @Valid FeedEdit request) {
