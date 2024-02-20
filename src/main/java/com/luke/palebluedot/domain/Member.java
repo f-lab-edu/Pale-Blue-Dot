@@ -15,12 +15,13 @@ import java.util.List;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
+@Table(name = "member")
 public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "MEMBER_ID")
-    private String memberId;
+    @Column(name = "member_id")
+    private Long memberId;
 
     @Column(name = "PASSWORD")
     private String password;
@@ -43,7 +44,7 @@ public class Member {
     private List<Feed> feeds = new ArrayList<>();
 
     @Builder
-    public Member(String memberId, String password, String memberName, String email, List<Feed> feeds){
+    public Member(Long memberId, String password, String memberName, String email, List<Feed> feeds){
         this.memberId = memberId;
         this.password = password;
         this.memberName = memberName;

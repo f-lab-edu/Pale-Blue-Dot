@@ -46,10 +46,8 @@ public class FeedController {
     }
 
     @GetMapping
-    public QueryResults<Feed> getFeeds(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size){
-        QueryResults<Feed> feeds = feedService.getFeeds(page, size);
+    public List<Feed> getFeeds(@RequestParam int size){
+        List<Feed> feeds = feedService.getFeeds(size);
         return feeds;
     }
 

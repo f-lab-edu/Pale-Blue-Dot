@@ -6,5 +6,5 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface FeedRepository extends JpaRepository<Feed, Long>, QuerydslPredicateExecutor<Feed> {
+public interface FeedRepository extends JpaRepository<Feed, Long>, FeedRepositoryCustom {
 }

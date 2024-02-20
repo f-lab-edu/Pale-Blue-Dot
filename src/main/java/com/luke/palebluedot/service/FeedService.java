@@ -26,16 +26,11 @@ public class FeedService {
 
     private final FeedRepository feedRepository;
     private final MemberRepository memberRepository;
-    private final EntityManager em;
-    private final JPAQueryFactory queryFactory;
-    private final QFeed qFeed;
 
-    public FeedService(FeedRepository feedRepository, MemberRepository memberRepository, EntityManager em) {
+
+    public FeedService(FeedRepository feedRepository, MemberRepository memberRepository) {
         this.feedRepository = feedRepository;
         this.memberRepository = memberRepository;
-        this.em = em;
-        this.queryFactory = new JPAQueryFactory(em);
-        this.qFeed = QFeed.feed;
     }
 
     public void createFeed(FeedCreate feedCreate, String memberId) {
@@ -60,12 +55,10 @@ public class FeedService {
                 .build();
     }
 
-    public QueryResults<Feed> getFeeds(int page, int size){
-        return queryFactory.selectFrom(qFeed)
-                .offset(page * size)
-                .limit(size)
-                .fetchResults();
+    public List<Feed> getFeeds(int size){
+        return feedRepository.getFeeds(size);
     }
+
 
     public void editFeed(Long feedId, FeedEdit feedEdit){
         Feed existingFeed = feedRepository.findById(feedId)
