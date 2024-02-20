@@ -5,7 +5,6 @@ import com.luke.palebluedot.request.FeedCreate;
 import com.luke.palebluedot.request.FeedEdit;
 import com.luke.palebluedot.response.FeedResponse;
 import com.luke.palebluedot.service.FeedService;
-import com.querydsl.core.QueryResults;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,8 +13,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,8 +26,8 @@ public class FeedController {
     private FeedService feedService;
 
     @PostMapping
-    public void createFeed(@RequestBody @Valid FeedCreate request, @PathVariable String memberId){
-        feedService.createFeed(request, memberId);
+    public void createFeed(@RequestBody @Valid FeedCreate request, @PathVariable String memberName){
+        feedService.createFeed(request, memberName);
     }
 
 
@@ -47,8 +44,7 @@ public class FeedController {
 
     @GetMapping
     public List<Feed> getFeeds(@RequestParam int size){
-        List<Feed> feeds = feedService.getFeeds(size);
-        return feeds;
+        return feedService.getFeeds(size);
     }
 
 

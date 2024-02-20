@@ -21,19 +21,19 @@ public class MemberController {
         memberService.createMember(request);
     }
 
-    @GetMapping("/{memberId}")
-    public MemberResponse getMember(@PathVariable String memberId) {
-        return memberService.getMember(memberId);
+    @GetMapping("/{memberName}")
+    public MemberResponse getMember(@PathVariable String memberName) {
+        return memberService.getMember(memberName);
     }
 
 
-    @PatchMapping("/{memberId}")
-    public void editMember(@PathVariable String memberId, @RequestBody @Valid MemberEdit request) {
-        memberService.editMember(memberId, request);
+    @PatchMapping("/{memberName}")
+    public void editMember(@PathVariable String memberName, @RequestBody @Valid MemberEdit request) {
+        memberService.editMember(memberName, request);
     }
 
-    @DeleteMapping("/{memberId}")
-    public void deleteMember(@PathVariable String memberId) {
-        memberService.deleteMember(memberId);
+    @DeleteMapping("/{memberName}")
+    public void deleteMember(@PathVariable String memberName) {
+        memberService.deleteMember(memberName);
     }
 }

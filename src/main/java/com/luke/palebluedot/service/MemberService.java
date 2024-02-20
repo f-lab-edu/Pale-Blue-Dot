@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Slf4j
 @Service
 @Transactional
@@ -21,7 +23,6 @@ public class MemberService {
 
     public void createMember(MemberCreate memberCreate){
         Member member = Member.builder()
-                .memberId(memberCreate.getMemberId())
                 .password(memberCreate.getPassword())
                 .memberName(memberCreate.getMemberName())
                 .email(memberCreate.getEmail())
@@ -29,8 +30,8 @@ public class MemberService {
         memberRepository.save(member);
     }
 
-    public MemberResponse getMember(String memberId) {
-        Member member = memberRepository.findByMemberId(memberId)
+    public MemberResponse getMember(String memberName) {
+        Member member = memberRepository.findByMemberName(memberName)
                 .orElseThrow(()->new IllegalArgumentException("회원정보가 없습니다."));
 
         return MemberResponse.builder()
@@ -41,12 +42,21 @@ public class MemberService {
     }
 
 
-    public void editMember(String memberId, MemberEdit memberEdit) {
-        Member member = memberRepository.findByMemberId(memberId)
-                .orElseThrow(()->new IllegalArgumentException("아이디가 없습니다."));
+    public void editMember(String memberName, MemberEdit memberEdit) {
+        Optional<Member> searchMember = memberRepository.findByMemberName(memberName);
+        if(searchMember.isPresent()){
+            Member changedMember = Member.builder()
+                    .memberName(memberEdit.getMemberName())
+                    .password(memberEdit.getPassword())
+                    .email(memberEdit.getEmail())
+                    .build();
+            memberRepository.save(changedMember);
+        }else{
+            throw new  IllegalArgumentException("회원정보가 없습니다.");
+        }
     }
 
-    public void deleteMember(String memberId) {
-        memberRepository.deleteByMemberId(memberId);
+    public void deleteMember(String memberName) {
+        memberRepository.deleteByMemberName(memberName);
     }
 }
