@@ -19,7 +19,6 @@ public class MemberServiceTest extends Specification {
     def "createMember - 정상작동확인"(){
         given:
         MemberCreate member = new MemberCreate()
-        member.setMemberId("testId")
         member.setMemberName("testName")
         member.setPassword("testpwd")
         member.setEmail("test@mail.com")

@@ -2,44 +2,68 @@ package com.luke.palebluedot.ServiceTest
 
 import com.luke.palebluedot.domain.Feed
 import com.luke.palebluedot.repository.FeedRepository
+import com.luke.palebluedot.repository.MemberRepository
 import com.luke.palebluedot.response.FeedResponse
 import com.luke.palebluedot.service.FeedService
 import spock.lang.Specification
+import spock.lang.Subject
 
 
 class FeedServiceTest extends Specification {
 
-    FeedService postService
-    FeedRepository postRepository = Mock()
+    FeedService feedService
+    FeedRepository feedRepository = Mock()
+    MemberRepository memberRepository = Mock()
 
     def setup() {
-        postService = new FeedService(postRepository)
+        feedService = new FeedService(feedRepository, memberRepository)
     }
-
     def cleanup() {
-        postRepository.deleteAll()
+        feedRepository.deleteAll()
+    }
+    def createFeed(Long feedId, String content = "test") {
+        return new Feed(feedId: feedId, content: content)
+    }
+    def createFeeds(int size){
+        List<Feed> feeds = []
+        (1..size).each{index ->
+            feeds << new Feed(feedId: index, content: "Feed test $index")
+        }
+        return feeds
     }
 
-    def "getPost - 성공시 내용 조회 확인"() {
+    def "getFeed - 성공시 내용 조회 확인"() {
         given:
-        Long postId = 1L
+        Long feedId = 1L
 
         when:
-        FeedResponse postResponse = postService.getFeed(postId)
+        FeedResponse feedResponse = feedService.getFeed(feedId)
 
         then:
-        postResponse.getContent() == expected
-        postResponse.getFeedId() == postId
+        feedResponse.getContent() == expected
+        feedResponse.getFeedId() == feedId
 
         and:
-        1 * postRepository.findById(_) >> Optional.of(createPost(postId, content))
+        1 * feedRepository.findById(_) >> Optional.of(createFeed(feedId, content))
 
         where:
         content || expected
         "test"  || "test"
     }
 
-    def createPost(Long feedId, String content = "test") {
-        return new Feed(feedId: feedId, content: content)
+    def "getFeeds - 성공시 피드 리스트 조회 확인"(){
+        given:
+        int size = 5
+        List<Feed> expectedFeeds = createFeeds(size)
+
+        when:
+        List<Feed> result = feedService.getFeeds(size)
+
+        then:
+        result == expectedFeeds
+
+        and:
+        1*feedRepository.getFeeds(size) >> expectedFeeds
     }
+
 }
