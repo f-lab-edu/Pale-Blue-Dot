@@ -6,8 +6,6 @@ import com.luke.palebluedot.repository.MemberRepository
 import com.luke.palebluedot.response.FeedResponse
 import com.luke.palebluedot.service.FeedService
 import spock.lang.Specification
-import spock.lang.Subject
-
 
 class FeedServiceTest extends Specification {
 
@@ -22,12 +20,12 @@ class FeedServiceTest extends Specification {
         feedRepository.deleteAll()
     }
     def createFeed(Long feedId, String content = "test") {
-        return new Feed(feedId: feedId, content: content)
+        return new Feed(feedId: feedId, feedContent: content)
     }
     def createFeeds(int size){
         List<Feed> feeds = []
         (1..size).each{index ->
-            feeds << new Feed(feedId: index, content: "Feed test $index")
+            feeds << new Feed(feedId: index, feedContent: "Feed test $index")
         }
         return feeds
     }

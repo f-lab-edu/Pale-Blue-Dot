@@ -32,7 +32,7 @@ public class FeedService {
                 .orElseThrow(()->new IllegalArgumentException("회원 정보가 없습니다."));
 
         Feed feed = Feed.builder()
-                .content(feedCreate.getContent())
+                .feedContent(feedCreate.getContent())
                 .member(member)
                 .build();
         feedRepository.save(feed);
@@ -45,7 +45,7 @@ public class FeedService {
 
         return FeedResponse.builder()
                 .feedId(feed.getFeedId())
-                .content(feed.getContent())
+                .content(feed.getFeedContent())
                 .build();
     }
 
@@ -58,7 +58,7 @@ public class FeedService {
         Optional<Feed> searchFeed = feedRepository.findById(feedId);
         if(searchFeed.isPresent()){
             Feed changedFeed = Feed.builder()
-                    .content(feedEdit.getContent())
+                    .feedContent(feedEdit.getContent())
                     .build();
             feedRepository.save(changedFeed);
         }else{

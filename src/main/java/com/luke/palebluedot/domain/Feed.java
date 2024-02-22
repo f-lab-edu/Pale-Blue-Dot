@@ -19,31 +19,31 @@ public class Feed {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "FEED_ID")
+    @Column(name = "feed_id")
     private Long feedId;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "MEMBER_ID")
+    @JoinColumn(name = "member_id")
     private Member member;
 
     @Lob
-    @Column(name = "FEED_CONTENT")
-    private String content;
+    @Column(name = "feed_content")
+    private String feedContent;
 
-    @Column(name = "CREATE_DATE")
+    @Column(name = "create_date")
     @CreatedDate
     private LocalDateTime createDate;
 
-    @Column(name = "UPDATE_DATE")
+    @Column(name = "update_date")
     @LastModifiedDate
     private LocalDateTime updateDate;
 
-    @Column(name = "LIKE_COUNT")
+    @Column(name = "like_count")
     private Integer likeCount;
 
     @Builder
-    public Feed(String content, Member member) {
-        this.content = content;
+    public Feed(String feedContent, Member member) {
+        this.feedContent = feedContent;
         this.member = member;
     }
 }
