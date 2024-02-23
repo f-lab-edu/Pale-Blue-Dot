@@ -45,15 +45,20 @@ public class FeedService {
     }
 
     public FeedResponse getFeed(Long feedId, int size) {
-        Feed feed = feedRepository.findById(feedId)
-                .orElseThrow(()->new IllegalArgumentException("게시글이 없습니다."));
-        List<Comment> comments = commentRepository.getComments(size, feedId);
+        Optional<Feed> optionalFeed = feedRepository.findById(feedId);
 
-        return FeedResponse.builder()
-                .feedId(feed.getFeedId())
-                .content(feed.getFeedContent())
-                .comments(comments)
-                .build();
+        if (optionalFeed.isPresent()) {
+            Feed feed = optionalFeed.get();
+            List<Comment> comments = commentRepository.getComments(size, feedId);
+
+            return FeedResponse.builder()
+                    .content(feed.getFeedContent())
+                    .comments(comments)
+                    .build();
+        }else{
+            throw new IllegalArgumentException("게시물이 없습니다.");
+        }
+
     }
 
     public List<Feed> getAllFeeds(int size){
@@ -66,8 +71,8 @@ public class FeedService {
 
 
     public void editFeed(Long feedId, FeedEdit feedEdit){
-        Optional<Feed> searchFeed = feedRepository.findById(feedId);
-        if(searchFeed.isPresent()){
+        Optional<Feed> optionalFeed = feedRepository.findById(feedId);
+        if(optionalFeed.isPresent()){
             Feed changedFeed = Feed.builder()
                     .feedContent(feedEdit.getContent())
                     .build();

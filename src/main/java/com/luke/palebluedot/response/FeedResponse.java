@@ -20,7 +20,7 @@ public class FeedResponse {
     @Builder
     public FeedResponse(Long feedId, String content, LocalDateTime createDate, LocalDateTime updateDate, int likeCount, List<Comment> comments) {
         this.feedId = feedId;
-        this.content = content.substring(0, Math.min(content.length(), 10));
+        this.content = content.substring(0, Math.min(content.length(), 30));
         this.createDate = createDate;
         this.updateDate = updateDate;
         this.likeCount = likeCount;
