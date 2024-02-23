@@ -9,7 +9,7 @@ import com.luke.palebluedot.response.FeedResponse
 import com.luke.palebluedot.service.FeedService
 import spock.lang.Specification
 
-class FeedServiceTest extends Specification {
+class CommentServiceTest extends Specification {
 
     FeedService feedService
     FeedRepository feedRepository = Mock()
@@ -43,31 +43,18 @@ class FeedServiceTest extends Specification {
     def "getFeed - 성공시 내용 조회 확인"() {
         given:
         Long feedId = 1L
-        int size = 0
+        int size = 10
         Feed feed = createFeed(feedId)
+        List<Comment> comments = createComments(size)
         when:
         1*feedRepository.findById(feedId) >> Optional.of(feed)
+        1*commentRepository.getComments(size, feedId) >> comments
 
         FeedResponse feedResponse = feedService.getFeed(feedId, size)
 
         then:
         feedResponse.getContent() == feed.getFeedContent()
+        feedResponse.getComments() == comments
 
     }
-
-    def "getFeeds - 성공시 피드 리스트 조회 확인"(){
-        given:
-        int size = 5
-        List<Feed> expectedFeeds = createFeeds(size)
-
-        when:
-        List<Feed> result = feedService.getAllFeeds(size)
-
-        then:
-        result == expectedFeeds
-
-        and:
-        1*feedRepository.getAllFeeds(size) >> expectedFeeds
-    }
-
 }
