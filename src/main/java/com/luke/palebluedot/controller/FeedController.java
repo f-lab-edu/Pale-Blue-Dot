@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,9 +21,11 @@ import java.util.List;
 @RequestMapping("/api/v1/feeds")
 public class FeedController {
 
-    @Autowired
-    private FeedService feedService;
+    private final FeedService feedService;
 
+    public FeedController(FeedService feedService) {
+        this.feedService = feedService;
+    }
     @PostMapping
     public void createFeed(@RequestBody @Valid FeedCreate request, @PathVariable String memberName){
         feedService.createFeed(request, memberName);
@@ -38,8 +39,8 @@ public class FeedController {
                     content = {@Content(schema = @Schema(implementation = Feed.class))}),
             @ApiResponse(responseCode = "404", description = "해당 ID의 게시글이 존재하지 않습니다."),
     })
-    public FeedResponse getFeed(@PathVariable Long feedId){
-        return feedService.getFeed(feedId);
+    public FeedResponse getFeed(@PathVariable Long feedId, @RequestParam int size){
+        return feedService.getFeed(feedId, size);
     }
 
     @GetMapping
@@ -48,7 +49,7 @@ public class FeedController {
     }
 
     @GetMapping("/myFeeds/{memberName}")
-    public List<Feed> getMyFeeds(@RequestParam int size, String memberName){
+    public List<Feed> getMyFeeds(@RequestParam int size, @PathVariable String memberName){
         return feedService.getMyFeeds(size,memberName);
     }
 

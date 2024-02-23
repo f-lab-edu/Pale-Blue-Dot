@@ -9,6 +9,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -41,9 +43,13 @@ public class Feed {
     @Column(name = "like_count")
     private Integer likeCount;
 
+    @OneToMany(mappedBy = "feed")
+    private List<Comment> comments = new ArrayList<>();
+
     @Builder
-    public Feed(String feedContent, Member member) {
+    public Feed(String feedContent, Member member, List<Comment> comments) {
         this.feedContent = feedContent;
         this.member = member;
+        this.comments = comments;
     }
 }

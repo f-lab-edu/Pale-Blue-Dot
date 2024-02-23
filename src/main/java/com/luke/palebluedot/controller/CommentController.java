@@ -16,7 +16,7 @@ public class CommentController {
         this.commentService = commentService;
     }
 
-    @PostMapping("")
+    @PostMapping
     public void createComment(@RequestBody CommentCreate request,
                               @PathVariable Long feedId,
                               @PathVariable String memberName){

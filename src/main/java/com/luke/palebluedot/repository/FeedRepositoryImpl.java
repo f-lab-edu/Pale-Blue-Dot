@@ -13,6 +13,14 @@ public class FeedRepositoryImpl extends QuerydslRepositorySupport implements Fee
     }
 
     @Override
+    public Feed getFeed(Long feedId) {
+        return from(feed)
+                .leftJoin(feed.comments).fetchJoin()
+                .where(feed.feedId.eq(feedId))
+                .fetchOne();
+    }
+
+    @Override
     public List<Feed> getAllFeeds(int size){
         return from(feed)
                 .orderBy(feed.feedId.asc())
