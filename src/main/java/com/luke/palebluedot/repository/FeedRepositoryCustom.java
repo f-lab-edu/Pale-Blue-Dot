@@ -5,7 +5,6 @@ import com.luke.palebluedot.domain.Feed;
 import java.util.List;
 
 public interface FeedRepositoryCustom {
-    public Feed getFeed(Long feedId);
     List<Feed> getAllFeeds(int size);
     List<Feed> getMyFeeds(int size, String memberName);
 }
