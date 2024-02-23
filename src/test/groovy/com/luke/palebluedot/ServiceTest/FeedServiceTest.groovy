@@ -61,7 +61,7 @@ class FeedServiceTest extends Specification {
         result == expectedFeeds
 
         and:
-        1*feedRepository.getFeeds(size) >> expectedFeeds
+        1*feedRepository.getAllFeeds(size) >> expectedFeeds
     }
 
 }
