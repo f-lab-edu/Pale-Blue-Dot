@@ -13,8 +13,9 @@ public class FeedRepositoryImpl extends QuerydslRepositorySupport implements Fee
     }
 
     @Override
-    public List<Feed> findMoreFeeds(int size){
+    public List<Feed> findMoreFeeds(int size, Long lastFeedId){
         return from(feed)
+                .where(feed.feedId.lt(lastFeedId))
                 .orderBy(feed.feedId.asc())
                 .limit(size)
                 .fetch();
