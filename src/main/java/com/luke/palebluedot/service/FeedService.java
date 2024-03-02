@@ -45,19 +45,16 @@ public class FeedService {
     }
 
     public FeedResponse getFeed(Long feedId, int size) {
-        Optional<Feed> optionalFeed = feedRepository.findById(feedId);
+        Feed existfeed = feedRepository.findById(feedId)
+                .orElseThrow(()->new IllegalArgumentException("게시글이 없습니다."));
 
-        if (optionalFeed.isPresent()) {
-            Feed feed = optionalFeed.get();
-            List<Comment> comments = commentRepository.getComments(size, feedId);
+        List<Comment> comments = commentRepository.getComments(size, feedId);
 
-            return FeedResponse.builder()
-                    .content(feed.getFeedContent())
-                    .comments(comments)
-                    .build();
-        }else{
-            throw new IllegalArgumentException("게시물이 없습니다.");
-        }
+        return FeedResponse.builder()
+                .content(existfeed.getFeedContent())
+                .comments(comments)
+                .build();
+
 
     }
 
@@ -71,15 +68,13 @@ public class FeedService {
 
 
     public void editFeed(Long feedId, FeedEdit feedEdit){
-        Optional<Feed> optionalFeed = feedRepository.findById(feedId);
-        if(optionalFeed.isPresent()){
-            Feed changedFeed = Feed.builder()
-                    .feedContent(feedEdit.getContent())
-                    .build();
-            feedRepository.save(changedFeed);
-        }else{
-            throw new IllegalArgumentException("게시물이 없습니다.");
-        }
+        Feed existFeed = feedRepository.findById(feedId)
+                .orElseThrow(() -> new IllegalArgumentException("피드가 존재하지 않습니다."));
+        existFeed = Feed.builder()
+                .feedContent(feedEdit.getContent())
+                .build();
+        feedRepository.save(existFeed);
+
     }
 
     public void deleteFeed(Long feedId) {
