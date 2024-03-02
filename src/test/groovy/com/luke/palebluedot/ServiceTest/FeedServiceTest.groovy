@@ -61,13 +61,13 @@ class FeedServiceTest extends Specification {
         List<Feed> expectedFeeds = createFeeds(size)
 
         when:
-        List<Feed> result = feedService.getAllFeeds(size)
+        List<Feed> result = feedService.findMoreFeeds(size)
 
         then:
         result == expectedFeeds
 
         and:
-        1*feedRepository.getAllFeeds(size) >> expectedFeeds
+        1*feedRepository.findMoreFeeds(size) >> expectedFeeds
     }
 
 }

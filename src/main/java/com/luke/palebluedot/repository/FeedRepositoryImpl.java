@@ -13,7 +13,7 @@ public class FeedRepositoryImpl extends QuerydslRepositorySupport implements Fee
     }
 
     @Override
-    public List<Feed> getAllFeeds(int size){
+    public List<Feed> findMoreFeeds(int size){
         return from(feed)
                 .orderBy(feed.feedId.asc())
                 .limit(size)

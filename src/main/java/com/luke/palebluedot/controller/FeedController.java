@@ -44,8 +44,8 @@ public class FeedController {
     }
 
     @GetMapping
-    public List<Feed> getAllFeeds(@RequestParam int size){
-        return feedService.getAllFeeds(size);
+    public List<Feed> findMoreFeeds(@RequestParam int size){
+        return feedService.findMoreFeeds(size);
     }
 
     @GetMapping("/myFeeds/{memberName}")

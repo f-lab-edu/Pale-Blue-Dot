@@ -61,8 +61,8 @@ public class FeedService {
 
     }
 
-    public List<Feed> getAllFeeds(int size){
-        return feedRepository.getAllFeeds(size);
+    public List<Feed> findMoreFeeds(int size){
+        return feedRepository.findMoreFeeds(size);
     }
 
     public List<Feed> getMyFeeds(int size, String memberName){
