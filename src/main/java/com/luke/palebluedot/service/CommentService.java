@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
-@Transactional
 public class CommentService {
 
     private final CommentRepository commentRepository;
@@ -30,7 +29,7 @@ public class CommentService {
         this.feedRepository = feedRepository;
         this.memberRepository = memberRepository;
     }
-
+    @Transactional
     public void createComment(CommentCreate commentCreate, Long feedId, String memberName){
         Feed feed = feedRepository.findById(feedId).orElseThrow(() -> new IllegalArgumentException("피드가 존재하지 않습니다."));
         Member member = memberRepository.findByMemberName(memberName).orElseThrow(() -> new IllegalArgumentException("사용자가 존재하지 않습니다."));

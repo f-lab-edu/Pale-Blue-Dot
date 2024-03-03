@@ -13,14 +13,13 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-@Transactional
 public class MemberService {
     private final MemberRepository memberRepository;
 
     public MemberService(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
     }
-
+    @Transactional
     public void createMember(MemberCreate memberCreate){
         Member member = Member.builder()
                 .password(memberCreate.getPassword())
@@ -29,7 +28,7 @@ public class MemberService {
                 .build();
         memberRepository.save(member);
     }
-
+    @Transactional
     public MemberResponse getMember(String memberName) {
         Member member = memberRepository.findByMemberName(memberName)
                 .orElseThrow(()->new IllegalArgumentException("회원정보가 없습니다."));
@@ -41,7 +40,7 @@ public class MemberService {
                 .build();
     }
 
-
+    @Transactional
     public void editMember(String memberName, MemberEdit memberEdit) {
         Optional<Member> searchMember = memberRepository.findByMemberName(memberName);
         if(searchMember.isPresent()){
@@ -55,7 +54,7 @@ public class MemberService {
             throw new  IllegalArgumentException("회원정보가 없습니다.");
         }
     }
-
+    @Transactional
     public void deleteMember(String memberName) {
         memberRepository.deleteByMemberName(memberName);
     }

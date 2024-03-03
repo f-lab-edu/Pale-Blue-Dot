@@ -18,7 +18,6 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-@Transactional
 public class FeedService {
 
     private final FeedRepository feedRepository;
@@ -32,6 +31,7 @@ public class FeedService {
         this.commentRepository = commentRepository;
     }
 
+    @Transactional
     public void createFeed(FeedCreate feedCreate, String memberName) {
         Member member = memberRepository.findByMemberName(memberName)
                 .orElseThrow(()->new IllegalArgumentException("회원 정보가 없습니다."));
@@ -43,7 +43,7 @@ public class FeedService {
         feedRepository.save(feed);
 
     }
-
+    @Transactional
     public FeedResponse getFeed(Long feedId, int size) {
         Feed existfeed = feedRepository.findById(feedId)
                 .orElseThrow(()->new IllegalArgumentException("게시글이 없습니다."));
@@ -57,16 +57,16 @@ public class FeedService {
 
 
     }
-
+    @Transactional
     public List<Feed> findMoreFeeds(int size, Long lastFeedId){
         return feedRepository.findMoreFeeds(size, lastFeedId);
     }
-
+    @Transactional
     public List<Feed> getMyFeeds(int size, String memberName){
         return feedRepository.getMyFeeds(size, memberName);
     }
 
-
+    @Transactional
     public void editFeed(Long feedId, FeedEdit feedEdit){
         Feed existFeed = feedRepository.findById(feedId)
                 .orElseThrow(() -> new IllegalArgumentException("피드가 존재하지 않습니다."));
@@ -76,7 +76,7 @@ public class FeedService {
         feedRepository.save(existFeed);
 
     }
-
+    @Transactional
     public void deleteFeed(Long feedId) {
         feedRepository.deleteById(feedId);
     }
