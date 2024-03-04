@@ -11,27 +11,23 @@ import spock.lang.Specification
 
 class FeedServiceTest extends Specification {
 
-    FeedService feedService
+
     FeedRepository feedRepository = Mock()
     MemberRepository memberRepository = Mock()
     CommentRepository commentRepository = Mock()
 
-    def setup() {
+    FeedService feedService = new FeedService(feedRepository, memberRepository, commentRepository)
+
+    /*def setup() {
         feedService = new FeedService(feedRepository, memberRepository, commentRepository)
-    }
+    }*/
     def cleanup() {
         feedRepository.deleteAll()
     }
     def createFeed(Long feedId, String content = "test") {
         return new Feed(feedId: feedId, feedContent: content)
     }
-    def createFeeds(int size){
-        List<Feed> feeds = []
-        (1..size).each{index ->
-            feeds << new Feed(feedId: index, feedContent: "Feed test $index")
-        }
-        return feeds
-    }
+
     def createComments(int size){
         List<Comment> comments = []
         (1..size).each{index ->
@@ -54,20 +50,28 @@ class FeedServiceTest extends Specification {
         feedResponse.getContent() == feed.getFeedContent()
 
     }
-
-    def "getFeeds - 성공시 피드 리스트 조회 확인"(){
+    def createFeeds(int size){
+        List<Feed> feeds = []
+        (1..size).each{Long index ->
+            feeds << new Feed(feedId: index, feedContent: "Feed test $index")
+        }
+        return feeds
+    }
+    def "findMoreFeeds - 성공시 피드 리스트 조회 확인"(){
         given:
         int size = 5
-        List<Feed> expectedFeeds = createFeeds(size)
+        Long lastFeedId = 5L
+        List<Feed> expectedFeeds = createFeeds(10)
 
         when:
-        List<Feed> result = feedService.findMoreFeeds(size)
+        List<Feed> result = feedService.findMoreFeeds(size, lastFeedId)
 
         then:
-        result == expectedFeeds
+
+        result.size() == size
 
         and:
-        1*feedRepository.findMoreFeeds(size) >> expectedFeeds
+        1*feedRepository.findMoreFeeds(size, lastFeedId) >> expectedFeeds
     }
 
 }
