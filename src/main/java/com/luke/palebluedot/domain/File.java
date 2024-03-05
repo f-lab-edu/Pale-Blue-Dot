@@ -10,8 +10,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -19,20 +17,15 @@ import static jakarta.persistence.FetchType.LAZY;
 @Entity
 @NoArgsConstructor(access= AccessLevel.PUBLIC)
 @EntityListeners(AuditingEntityListener.class)
-public class Feed {
-
+public class File {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "feed_id")
-    private Long feedId;
+    @Column(name = "file_id")
+    private Long fileId;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
-
-    @Lob
-    @Column(name = "feed_content")
-    private String feedContent;
+    @JoinColumn(name = "feed_id")
+    private Feed feed;
 
     @Column(name = "create_date")
     @CreatedDate
@@ -42,20 +35,13 @@ public class Feed {
     @LastModifiedDate
     private LocalDateTime updateDate;
 
-    @Column(name = "like_count")
-    private Integer likeCount;
-
-    @OneToMany(mappedBy = "feed")
-    private List<Comment> comments = new ArrayList<>();
-
-    @OneToMany(mappedBy = "feed")
-    private List<File> files = new ArrayList<>();
+    @Column(name = "file_path")
+    private String filePath;
 
     @Builder
-    public Feed(String feedContent, Member member, List<Comment> comments, List<File> files) {
-        this.feedContent = feedContent;
-        this.member = member;
-        this.comments = comments;
-        this.files = files;
+    public File(Long fileId, Feed feed, String filePath) {
+        this.fileId = fileId;
+        this.feed = feed;
+        this.filePath = filePath;
     }
 }
