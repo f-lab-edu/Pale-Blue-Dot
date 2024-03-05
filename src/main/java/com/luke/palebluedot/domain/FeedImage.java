@@ -17,11 +17,11 @@ import static jakarta.persistence.FetchType.LAZY;
 @Entity
 @NoArgsConstructor(access= AccessLevel.PUBLIC)
 @EntityListeners(AuditingEntityListener.class)
-public class File {
+public class FeedImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "file_id")
-    private Long fileId;
+    @Column(name = "feed_image_id")
+    private Long feedImageId;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "feed_id")
@@ -39,9 +39,7 @@ public class File {
     private String filePath;
 
     @Builder
-    public File(Long fileId, Feed feed, String filePath) {
-        this.fileId = fileId;
-        this.feed = feed;
+    public FeedImage(String filePath) {
         this.filePath = filePath;
     }
 }

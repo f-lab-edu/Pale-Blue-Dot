@@ -2,6 +2,7 @@ package com.luke.palebluedot.service;
 
 import com.luke.palebluedot.domain.Comment;
 import com.luke.palebluedot.domain.Feed;
+import com.luke.palebluedot.domain.FeedImage;
 import com.luke.palebluedot.domain.Member;
 import com.luke.palebluedot.repository.CommentRepository;
 import com.luke.palebluedot.repository.FeedRepository;
@@ -12,9 +13,11 @@ import com.luke.palebluedot.response.FeedResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -23,22 +26,31 @@ public class FeedService {
     private final FeedRepository feedRepository;
     private final MemberRepository memberRepository;
     private final CommentRepository commentRepository;
+    private final FeedImageService feedImageService;
 
-
-    public FeedService(FeedRepository feedRepository, MemberRepository memberRepository, CommentRepository commentRepository) {
+    public FeedService(FeedRepository feedRepository, MemberRepository memberRepository, CommentRepository commentRepository, FeedImageService feedImageService) {
         this.feedRepository = feedRepository;
         this.memberRepository = memberRepository;
         this.commentRepository = commentRepository;
+        this.feedImageService = feedImageService;
     }
 
     @Transactional
-    public void createFeed(FeedCreate feedCreate, Long memberId) {
+    public void createFeed(FeedCreate feedCreate, Long memberId, List<MultipartFile> files) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(()->new IllegalArgumentException("회원 정보가 없습니다."));
 
+        List<FeedImage> feedImageList = new ArrayList<>();
+        if(files != null && !files.isEmpty()){
+            for(MultipartFile uploadedFile : files){
+                FeedImage feedImage = feedImageService.uploadFile(uploadedFile, memberId);
+                feedImageList.add(feedImage);
+            }
+        }
         Feed feed = Feed.builder()
                 .feedContent(feedCreate.getContent())
                 .member(member)
+                .feedImages(feedImageList)
                 .build();
         feedRepository.save(feed);
 

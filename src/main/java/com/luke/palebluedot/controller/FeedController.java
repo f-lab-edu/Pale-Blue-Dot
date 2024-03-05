@@ -13,7 +13,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Slf4j
@@ -27,8 +29,8 @@ public class FeedController {
         this.feedService = feedService;
     }
     @PostMapping
-    public void createFeed(@RequestBody @Valid FeedCreate request, @PathVariable Long memberId){
-        feedService.createFeed(request, memberId);
+    public void createFeed(@RequestBody @Valid FeedCreate request, Long memberId, List<MultipartFile> files) {
+        feedService.createFeed(request, memberId, files);
     }
 
 

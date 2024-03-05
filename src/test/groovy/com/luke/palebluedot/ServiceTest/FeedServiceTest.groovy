@@ -6,6 +6,7 @@ import com.luke.palebluedot.repository.CommentRepository
 import com.luke.palebluedot.repository.FeedRepository
 import com.luke.palebluedot.repository.MemberRepository
 import com.luke.palebluedot.response.FeedResponse
+import com.luke.palebluedot.service.FeedImageService
 import com.luke.palebluedot.service.FeedService
 import spock.lang.Specification
 
@@ -15,8 +16,9 @@ class FeedServiceTest extends Specification {
     FeedRepository feedRepository = Mock()
     MemberRepository memberRepository = Mock()
     CommentRepository commentRepository = Mock()
+    FeedImageService feedImageService = Mock()
 
-    FeedService feedService = new FeedService(feedRepository, memberRepository, commentRepository)
+    FeedService feedService = new FeedService(feedRepository, memberRepository, commentRepository, feedImageService)
 
     /*def setup() {
         feedService = new FeedService(feedRepository, memberRepository, commentRepository)
@@ -61,7 +63,7 @@ class FeedServiceTest extends Specification {
         given:
         int size = 5
         Long lastFeedId = 5L
-        List<Feed> expectedFeeds = createFeeds(10)
+        List<Feed> expectedFeeds = createFeeds(size)
 
         when:
         List<Feed> result = feedService.findMoreFeeds(size, lastFeedId)
@@ -71,7 +73,8 @@ class FeedServiceTest extends Specification {
         result.size() == size
 
         and:
-        1*feedRepository.findMoreFeeds(size, lastFeedId) >> expectedFeeds
+        1 * feedRepository.findMoreFeeds(size, lastFeedId) >> expectedFeeds
+
     }
 
 }

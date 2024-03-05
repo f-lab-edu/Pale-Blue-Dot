@@ -49,13 +49,14 @@ public class Feed {
     private List<Comment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "feed")
-    private List<File> files = new ArrayList<>();
+    private List<FeedImage> feedImages = new ArrayList<>();
 
     @Builder
-    public Feed(String feedContent, Member member, List<Comment> comments, List<File> files) {
+    public Feed(Long feedId, String feedContent, Member member, List<Comment> comments, List<FeedImage> feedImages) {
+        this.feedId = feedId;
         this.feedContent = feedContent;
         this.member = member;
         this.comments = comments;
-        this.files = files;
+        this.feedImages = feedImages;
     }
 }
