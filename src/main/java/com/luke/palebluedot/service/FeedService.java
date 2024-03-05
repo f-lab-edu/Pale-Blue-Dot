@@ -32,8 +32,8 @@ public class FeedService {
     }
 
     @Transactional
-    public void createFeed(FeedCreate feedCreate, String memberName) {
-        Member member = memberRepository.findByMemberName(memberName)
+    public void createFeed(FeedCreate feedCreate, Long memberId) {
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(()->new IllegalArgumentException("회원 정보가 없습니다."));
 
         Feed feed = Feed.builder()
@@ -70,6 +70,7 @@ public class FeedService {
     public void editFeed(Long feedId, FeedEdit feedEdit){
         Feed existFeed = feedRepository.findById(feedId)
                 .orElseThrow(() -> new IllegalArgumentException("피드가 존재하지 않습니다."));
+
         existFeed = Feed.builder()
                 .feedContent(feedEdit.getContent())
                 .build();
