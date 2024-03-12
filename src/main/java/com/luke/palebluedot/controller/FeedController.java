@@ -27,8 +27,8 @@ public class FeedController {
         this.feedService = feedService;
     }
     @PostMapping
-    public void createFeed(@RequestBody @Valid FeedCreate request, @PathVariable String memberName){
-        feedService.createFeed(request, memberName);
+    public void createFeed(@RequestBody @Valid FeedCreate request, Long memberId){
+        feedService.createFeed(request, memberId);
     }
 
 
@@ -39,8 +39,8 @@ public class FeedController {
                     content = {@Content(schema = @Schema(implementation = Feed.class))}),
             @ApiResponse(responseCode = "404", description = "해당 ID의 게시글이 존재하지 않습니다."),
     })
-    public FeedResponse getFeed(@PathVariable Long feedId, @RequestParam int size){
-        return feedService.getFeed(feedId, size);
+    public FeedResponse getFeed(@PathVariable Long feedId, int size, Long lastCommentId){
+        return feedService.getFeed(feedId, size, lastCommentId);
     }
 
     @GetMapping
@@ -48,9 +48,9 @@ public class FeedController {
         return feedService.findMoreFeeds(size, lastFeedId);
     }
 
-    @GetMapping("/myFeeds/{memberName}")
-    public List<Feed> getMyFeeds(@RequestParam int size, @PathVariable String memberName){
-        return feedService.getMyFeeds(size,memberName);
+    @GetMapping("/myFeeds/{memberId}")
+    public List<Feed> getMyFeeds(@RequestParam int size, @PathVariable Long memberId){
+        return feedService.getMyFeeds(size,memberId);
     }
 
 

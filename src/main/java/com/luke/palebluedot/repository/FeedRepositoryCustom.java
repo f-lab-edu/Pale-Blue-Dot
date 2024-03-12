@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface FeedRepositoryCustom {
     List<Feed> findMoreFeeds(int size, Long lastFeedId);
-    List<Feed> getMyFeeds(int size, String memberName);
+    List<Feed> getMyFeeds(int size, Long memberId);
 }

@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -32,8 +31,8 @@ public class FeedService {
     }
 
     @Transactional
-    public void createFeed(FeedCreate feedCreate, String memberName) {
-        Member member = memberRepository.findByMemberName(memberName)
+    public void createFeed(FeedCreate feedCreate, Long memberId) {
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(()->new IllegalArgumentException("회원 정보가 없습니다."));
 
         Feed feed = Feed.builder()
@@ -43,12 +42,12 @@ public class FeedService {
         feedRepository.save(feed);
 
     }
-    @Transactional
-    public FeedResponse getFeed(Long feedId, int size) {
+    @Transactional(readOnly = true)
+    public FeedResponse getFeed(Long feedId, int size, Long lastCommentId) {
         Feed existfeed = feedRepository.findById(feedId)
                 .orElseThrow(()->new IllegalArgumentException("게시글이 없습니다."));
 
-        List<Comment> comments = commentRepository.getComments(size, feedId);
+        List<Comment> comments = commentRepository.getComments(size, feedId, lastCommentId);
 
         return FeedResponse.builder()
                 .content(existfeed.getFeedContent())
@@ -57,20 +56,20 @@ public class FeedService {
 
 
     }
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Feed> findMoreFeeds(int size, Long lastFeedId){
         return feedRepository.findMoreFeeds(size, lastFeedId);
     }
-    @Transactional
-    public List<Feed> getMyFeeds(int size, String memberName){
-        return feedRepository.getMyFeeds(size, memberName);
+    @Transactional(readOnly = true)
+    public List<Feed> getMyFeeds(int size, Long memberId){
+        return feedRepository.getMyFeeds(size, memberId);
     }
 
     @Transactional
     public void editFeed(Long feedId, FeedEdit feedEdit){
         Feed existFeed = feedRepository.findById(feedId)
                 .orElseThrow(() -> new IllegalArgumentException("피드가 존재하지 않습니다."));
-        existFeed = Feed.builder()
+        existFeed.builder()
                 .feedContent(feedEdit.getContent())
                 .build();
         feedRepository.save(existFeed);

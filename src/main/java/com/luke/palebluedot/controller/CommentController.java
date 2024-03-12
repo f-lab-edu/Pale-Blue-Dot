@@ -17,9 +17,7 @@ public class CommentController {
     }
 
     @PostMapping
-    public void createComment(@RequestBody CommentCreate request,
-                              @PathVariable Long feedId,
-                              @PathVariable String memberName){
+    public void createComment(@RequestBody CommentCreate request, Long feedId, String memberName){
         commentService.createComment(request, feedId, memberName);
     }
 

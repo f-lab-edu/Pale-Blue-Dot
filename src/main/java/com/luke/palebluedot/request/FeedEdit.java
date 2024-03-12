@@ -13,5 +13,4 @@ public class FeedEdit {
         this.content = content;
         this.likeCount = likeCount;
     }
-
 }
