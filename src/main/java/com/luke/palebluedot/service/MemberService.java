@@ -28,7 +28,7 @@ public class MemberService {
                 .build();
         memberRepository.save(member);
     }
-    @Transactional
+    @Transactional(readOnly = true)
     public MemberResponse getMember(String memberName) {
         Member member = memberRepository.findByMemberName(memberName)
                 .orElseThrow(()->new IllegalArgumentException("회원정보가 없습니다."));

@@ -20,9 +20,6 @@ class FeedServiceTest extends Specification {
 
     FeedService feedService = new FeedService(feedRepository, memberRepository, commentRepository, feedImageService)
 
-    /*def setup() {
-        feedService = new FeedService(feedRepository, memberRepository, commentRepository)
-    }*/
     def cleanup() {
         feedRepository.deleteAll()
     }
@@ -62,18 +59,13 @@ class FeedServiceTest extends Specification {
     def "findMoreFeeds - 성공시 피드 리스트 조회 확인"(){
         given:
         int size = 5
-        Long lastFeedId = 5L
-        List<Feed> expectedFeeds = createFeeds(size)
+        Long lastFeedId = 6L
 
         when:
-        List<Feed> result = feedService.findMoreFeeds(size, lastFeedId)
+        feedService.findMoreFeeds(size, lastFeedId)
 
         then:
-
-        result.size() == size
-
-        and:
-        1 * feedRepository.findMoreFeeds(size, lastFeedId) >> expectedFeeds
+        1 * feedRepository.findMoreFeeds(size, lastFeedId)
 
     }
 

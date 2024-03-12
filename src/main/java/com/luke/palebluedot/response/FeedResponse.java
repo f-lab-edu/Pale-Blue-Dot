@@ -15,12 +15,12 @@ public class FeedResponse {
     private final LocalDateTime createDate;
     private final LocalDateTime updateDate;
     private final Integer likeCount;
-    private List<Comment> comments;
+    private final List<Comment> comments;
 
     @Builder
     public FeedResponse(Long feedId, String content, LocalDateTime createDate, LocalDateTime updateDate, int likeCount, List<Comment> comments) {
         this.feedId = feedId;
-        this.content = content.substring(0, Math.min(content.length(), 30));
+        this.content = content;
         this.createDate = createDate;
         this.updateDate = updateDate;
         this.likeCount = likeCount;

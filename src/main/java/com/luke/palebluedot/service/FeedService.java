@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,12 +54,12 @@ public class FeedService {
         feedRepository.save(feed);
 
     }
-    @Transactional
-    public FeedResponse getFeed(Long feedId, int size) {
+    @Transactional(readOnly = true)
+    public FeedResponse getFeed(Long feedId, int size, Long lastCommentId) {
         Feed existfeed = feedRepository.findById(feedId)
                 .orElseThrow(()->new IllegalArgumentException("게시글이 없습니다."));
 
-        List<Comment> comments = commentRepository.getComments(size, feedId);
+        List<Comment> comments = commentRepository.getComments(size, feedId, lastCommentId);
 
         return FeedResponse.builder()
                 .content(existfeed.getFeedContent())
@@ -69,13 +68,13 @@ public class FeedService {
 
 
     }
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Feed> findMoreFeeds(int size, Long lastFeedId){
         return feedRepository.findMoreFeeds(size, lastFeedId);
     }
-    @Transactional
-    public List<Feed> getMyFeeds(int size, String memberName){
-        return feedRepository.getMyFeeds(size, memberName);
+    @Transactional(readOnly = true)
+    public List<Feed> getMyFeeds(int size, Long memberId){
+        return feedRepository.getMyFeeds(size, memberId);
     }
 
     @Transactional

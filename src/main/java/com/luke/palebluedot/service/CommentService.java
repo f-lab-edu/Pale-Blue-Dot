@@ -30,9 +30,9 @@ public class CommentService {
         this.memberRepository = memberRepository;
     }
     @Transactional
-    public void createComment(CommentCreate commentCreate, Long feedId, String memberName){
+    public void createComment(CommentCreate commentCreate, Long feedId, Long memberId){
         Feed feed = feedRepository.findById(feedId).orElseThrow(() -> new IllegalArgumentException("피드가 존재하지 않습니다."));
-        Member member = memberRepository.findByMemberName(memberName).orElseThrow(() -> new IllegalArgumentException("사용자가 존재하지 않습니다."));
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException("사용자가 존재하지 않습니다."));
         Comment comment = Comment.builder()
                 .commentContent(commentCreate.getContent())
                 .feed(feed)

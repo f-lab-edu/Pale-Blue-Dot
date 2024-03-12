@@ -15,9 +15,10 @@ public class CommentRepositoryImpl extends QuerydslRepositorySupport implements 
     }
 
     @Override
-    public List<Comment> getComments(int size, Long feedId){
+    public List<Comment> getComments(int size, Long feedId, Long lastCommentId){
         return from(comment)
-                .where(comment.feed.feedId.eq(feedId))
+                .where(comment.feed.feedId.eq(feedId)
+                        .and(comment.commentId.lt(lastCommentId)))
                 .orderBy(comment.createDate.asc())
                 .limit(size)
                 .fetch();
