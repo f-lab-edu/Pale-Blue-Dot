@@ -6,10 +6,9 @@ import com.luke.palebluedot.request.MemberCreate;
 import com.luke.palebluedot.request.MemberEdit;
 import com.luke.palebluedot.response.MemberResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -20,17 +19,17 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
     @Transactional
-    public void createMember(MemberCreate memberCreate){
+    public ResponseEntity createMember(MemberCreate memberCreate){
         Member member = Member.builder()
                 .password(memberCreate.getPassword())
                 .memberName(memberCreate.getMemberName())
                 .email(memberCreate.getEmail())
                 .build();
-        memberRepository.save(member);
+        return ResponseEntity.ok(memberRepository.save(member));
     }
     @Transactional(readOnly = true)
-    public MemberResponse getMember(String memberName) {
-        Member member = memberRepository.findByMemberName(memberName)
+    public MemberResponse getMember(Long memberId) {
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(()->new IllegalArgumentException("회원정보가 없습니다."));
 
         return MemberResponse.builder()
@@ -41,21 +40,18 @@ public class MemberService {
     }
 
     @Transactional
-    public void editMember(String memberName, MemberEdit memberEdit) {
-        Optional<Member> searchMember = memberRepository.findByMemberName(memberName);
-        if(searchMember.isPresent()){
-            Member changedMember = Member.builder()
+    public ResponseEntity editMember(Long memberId, MemberEdit memberEdit) {
+        Member existMember = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("회원이 존재하지 않습니다."));
+        existMember.builder()
                     .memberName(memberEdit.getMemberName())
                     .password(memberEdit.getPassword())
                     .email(memberEdit.getEmail())
                     .build();
-            memberRepository.save(changedMember);
-        }else{
-            throw new  IllegalArgumentException("회원정보가 없습니다.");
-        }
+        return ResponseEntity.ok(memberRepository.save(existMember));
     }
     @Transactional
-    public void deleteMember(String memberName) {
-        memberRepository.deleteByMemberName(memberName);
+    public void deleteMember(Long memberId) {
+        memberRepository.deleteById(memberId);
     }
 }

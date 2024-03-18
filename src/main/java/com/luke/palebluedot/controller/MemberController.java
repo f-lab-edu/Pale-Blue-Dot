@@ -7,6 +7,7 @@ import com.luke.palebluedot.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -17,23 +18,23 @@ public class MemberController {
     private MemberService memberService;
 
     @PostMapping
-    public void createMember(@RequestBody @Valid MemberCreate request) {
-        memberService.createMember(request);
+    public ResponseEntity createMember(@RequestBody @Valid MemberCreate request) {
+        return ResponseEntity.ok(memberService.createMember(request));
     }
 
     @GetMapping("/{memberName}")
-    public MemberResponse getMember(@PathVariable String memberName) {
-        return memberService.getMember(memberName);
+    public MemberResponse getMember(@PathVariable Long memberId) {
+        return memberService.getMember(memberId);
     }
 
 
-    @PatchMapping("/{memberName}")
-    public void editMember(@PathVariable String memberName, @RequestBody @Valid MemberEdit request) {
-        memberService.editMember(memberName, request);
+    @PatchMapping("/{memberId}")
+    public ResponseEntity editMember(@PathVariable Long memberId, @RequestBody @Valid MemberEdit request) {
+        return ResponseEntity.ok(memberService.editMember(memberId, request));
     }
 
     @DeleteMapping("/{memberName}")
-    public void deleteMember(@PathVariable String memberName) {
-        memberService.deleteMember(memberName);
+    public void deleteMember(@PathVariable Long memberId) {
+        memberService.deleteMember(memberId);
     }
 }
