@@ -8,11 +8,11 @@ import lombok.Getter;
 @Getter
 public class MemberCreate {
     @NotBlank(message = "비밀번호를 입력해주세요")
-    private String password;
+    private final String password;
     @NotBlank(message = "계정이름을 입력해주세요")
-    private String memberName;
+    private final String memberName;
     @NotBlank(message = "이메일을 입력해주세요")
-    private String email;
+    private final String email;
 
     @Builder
     public MemberCreate(String password, String memberName, String email) {
