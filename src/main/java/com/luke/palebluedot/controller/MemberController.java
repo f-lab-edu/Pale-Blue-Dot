@@ -1,5 +1,6 @@
 package com.luke.palebluedot.controller;
 
+import com.luke.palebluedot.domain.Member;
 import com.luke.palebluedot.request.MemberCreate;
 import com.luke.palebluedot.request.MemberEdit;
 import com.luke.palebluedot.response.MemberResponse;
@@ -18,22 +19,22 @@ public class MemberController {
     private MemberService memberService;
 
     @PostMapping
-    public ResponseEntity createMember(@RequestBody @Valid MemberCreate request) {
+    public ResponseEntity<Member> createMember(@RequestBody @Valid MemberCreate request) {
         return ResponseEntity.ok(memberService.createMember(request));
     }
 
-    @GetMapping("/{memberName}")
+    @GetMapping("/{memberId}")
     public MemberResponse getMember(@PathVariable Long memberId) {
         return memberService.getMember(memberId);
     }
 
 
     @PatchMapping("/{memberId}")
-    public ResponseEntity editMember(@PathVariable Long memberId, @RequestBody @Valid MemberEdit request) {
+    public ResponseEntity<Member> editMember(@PathVariable Long memberId, @RequestBody @Valid MemberEdit request) {
         return ResponseEntity.ok(memberService.editMember(memberId, request));
     }
 
-    @DeleteMapping("/{memberName}")
+    @DeleteMapping("/{memberId}")
     public void deleteMember(@PathVariable Long memberId) {
         memberService.deleteMember(memberId);
     }

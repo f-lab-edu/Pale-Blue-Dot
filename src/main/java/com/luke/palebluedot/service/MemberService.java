@@ -6,7 +6,6 @@ import com.luke.palebluedot.request.MemberCreate;
 import com.luke.palebluedot.request.MemberEdit;
 import com.luke.palebluedot.response.MemberResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,13 +18,9 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
     @Transactional
-    public ResponseEntity createMember(MemberCreate memberCreate){
-        Member member = Member.builder()
-                .password(memberCreate.getPassword())
-                .memberName(memberCreate.getMemberName())
-                .email(memberCreate.getEmail())
-                .build();
-        return ResponseEntity.ok(memberRepository.save(member));
+    public Member createMember(MemberCreate memberCreate){
+        Member member = Member.toEntity(memberCreate);
+        return memberRepository.save(member);
     }
     @Transactional(readOnly = true)
     public MemberResponse getMember(Long memberId) {
@@ -40,15 +35,10 @@ public class MemberService {
     }
 
     @Transactional
-    public ResponseEntity editMember(Long memberId, MemberEdit memberEdit) {
-        Member existMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("회원이 존재하지 않습니다."));
-        existMember.builder()
-                    .memberName(memberEdit.getMemberName())
-                    .password(memberEdit.getPassword())
-                    .email(memberEdit.getEmail())
-                    .build();
-        return ResponseEntity.ok(memberRepository.save(existMember));
+    public Member editMember(Long memberId, MemberEdit memberEdit) {
+        Member existMember = memberRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException("회원이 존재하지 않습니다."));
+        Member.toEntity(memberEdit);
+        return existMember;
     }
     @Transactional
     public void deleteMember(Long memberId) {

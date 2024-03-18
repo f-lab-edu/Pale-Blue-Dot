@@ -1,5 +1,6 @@
 package com.luke.palebluedot.request;
 
+import com.luke.palebluedot.domain.Member;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -15,5 +16,14 @@ public class MemberEdit {
         this.password = password;
         this.email = email;
     }
+
+    public MemberEdit toDTO(Member entity){
+        return MemberEdit.builder()
+                .password(entity.getPassword())
+                .memberName(entity.getMemberName())
+                .email(entity.getEmail())
+                .build();
+    }
+
 
 }

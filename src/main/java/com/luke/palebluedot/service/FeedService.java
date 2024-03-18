@@ -82,9 +82,9 @@ public class FeedService {
         Feed existFeed = feedRepository.findById(feedId)
                 .orElseThrow(() -> new IllegalArgumentException("피드가 존재하지 않습니다."));
 
-        existFeed = Feed.builder()
+        /*existFeed = Feed.builder()
                 .feedContent(feedEdit.getContent())
-                .build();
+                .build();*/
         feedRepository.save(existFeed);
 
     }

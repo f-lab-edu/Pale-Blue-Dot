@@ -6,7 +6,6 @@ import com.luke.palebluedot.repository.CommentRepository
 import com.luke.palebluedot.repository.FeedRepository
 import com.luke.palebluedot.repository.MemberRepository
 import com.luke.palebluedot.response.FeedResponse
-import com.luke.palebluedot.service.FeedImageService
 import com.luke.palebluedot.service.FeedService
 import spock.lang.Specification
 
@@ -16,9 +15,8 @@ class FeedServiceTest extends Specification {
     FeedRepository feedRepository = Mock()
     MemberRepository memberRepository = Mock()
     CommentRepository commentRepository = Mock()
-    FeedImageService feedImageService = Mock()
 
-    FeedService feedService = new FeedService(feedRepository, memberRepository, commentRepository, feedImageService)
+    FeedService feedService = new FeedService(feedRepository, memberRepository, commentRepository)
 
     def cleanup() {
         feedRepository.deleteAll()
