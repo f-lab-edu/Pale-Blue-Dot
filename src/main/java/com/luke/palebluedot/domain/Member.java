@@ -1,6 +1,5 @@
 package com.luke.palebluedot.domain;
 
-import com.luke.palebluedot.request.MemberCreate;
 import com.luke.palebluedot.request.MemberEdit;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -56,19 +55,10 @@ public class Member {
         this.feeds = feeds;
     }
 
-    public static Member toEntity(MemberEdit dto){
-        return Member.builder()
-                .password(dto.getPassword())
-                .email(dto.getEmail())
-                .memberName(dto.getMemberName())
-                .build();
+    public void update(MemberEdit dto){
+        this.password = dto.getPassword();
+        this.memberName = dto.getMemberName();
+        this.email = dto.getEmail();
     }
 
-    public static Member toEntity(MemberCreate dto){
-        return Member.builder()
-                .password(dto.getPassword())
-                .email(dto.getEmail())
-                .memberName(dto.getMemberName())
-                .build();
-    }
 }
