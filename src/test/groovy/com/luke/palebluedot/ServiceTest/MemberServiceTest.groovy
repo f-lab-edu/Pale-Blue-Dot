@@ -2,8 +2,8 @@ package com.luke.palebluedot.ServiceTest
 
 import com.luke.palebluedot.domain.Member
 import com.luke.palebluedot.repository.MemberRepository
-import com.luke.palebluedot.request.RequestMemberCreate
-import com.luke.palebluedot.request.RequestMemberEdit
+import com.luke.palebluedot.request.MemberCreateRequest
+import com.luke.palebluedot.request.MemberEditRequest
 import com.luke.palebluedot.service.MemberService
 import spock.lang.Specification
 
@@ -28,7 +28,7 @@ public class MemberServiceTest extends Specification {
         given:
         Long memberId = 1L
         Member joinMember = createMember(memberId)
-        RequestMemberCreate reMember = RequestMemberCreate.toDTO(joinMember)
+        MemberCreateRequest reMember = MemberCreateRequest.toDTO(joinMember)
 
         when:
         memberService.createMember(reMember)
@@ -47,7 +47,7 @@ public class MemberServiceTest extends Specification {
         memberRepository.findById(memberId) >> Optional.of(existMember)
         memberRepository.save(_ as Member) >> { Member savedMember -> savedMember }
 
-        RequestMemberEdit memberEdit = RequestMemberEdit.builder()
+        MemberEditRequest memberEdit = MemberEditRequest.builder()
             .memberName("editname")
             .email("editmail")
             .password("editpassword")

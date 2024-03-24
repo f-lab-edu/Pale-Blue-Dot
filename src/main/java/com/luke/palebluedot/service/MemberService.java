@@ -2,8 +2,8 @@ package com.luke.palebluedot.service;
 
 import com.luke.palebluedot.domain.Member;
 import com.luke.palebluedot.repository.MemberRepository;
-import com.luke.palebluedot.request.RequestMemberCreate;
-import com.luke.palebluedot.request.RequestMemberEdit;
+import com.luke.palebluedot.request.MemberCreateRequest;
+import com.luke.palebluedot.request.MemberEditRequest;
 import com.luke.palebluedot.response.MemberResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,10 +18,10 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
     @Transactional
-    public RequestMemberCreate createMember(RequestMemberCreate requestMemberCreate){
-        Member member = requestMemberCreate.toEntity(requestMemberCreate);
+    public MemberCreateRequest createMember(MemberCreateRequest memberCreateRequest){
+        Member member = MemberCreateRequest.toEntity(memberCreateRequest);
         Member savedMember = memberRepository.save(member);
-        return RequestMemberCreate.toDTO(savedMember);
+        return MemberCreateRequest.toDTO(savedMember);
     }
     @Transactional(readOnly = true)
     public MemberResponse getMember(Long memberId) {
@@ -36,10 +36,10 @@ public class MemberService {
     }
 
     @Transactional
-    public RequestMemberEdit editMember(Long memberId, RequestMemberEdit requestMemberEdit) {
+    public MemberEditRequest editMember(Long memberId, MemberEditRequest memberEditRequest) {
         Member existMember = memberRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException("회원이 존재하지 않습니다."));
-        existMember.update(requestMemberEdit);
-        return RequestMemberEdit.toDTO(existMember);
+        existMember.update(memberEditRequest);
+        return MemberEditRequest.toDTO(existMember);
     }
     @Transactional(readOnly=true)
     public void deleteMember(Long memberId) {

@@ -5,20 +5,20 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class RequestMemberEdit {
+public class MemberEditRequest {
     private final String memberName;
     private final String password;
     private final String email;
 
     @Builder
-    public RequestMemberEdit(String memberName, String password, String email) {
+    public MemberEditRequest(String memberName, String password, String email) {
         this.memberName = memberName;
         this.password = password;
         this.email = email;
     }
 
-    public static RequestMemberEdit toDTO(Member entity){
-        return RequestMemberEdit.builder()
+    public static MemberEditRequest toDTO(Member entity){
+        return MemberEditRequest.builder()
                 .password(entity.getPassword())
                 .memberName(entity.getMemberName())
                 .email(entity.getEmail())
