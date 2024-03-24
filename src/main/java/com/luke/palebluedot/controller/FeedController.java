@@ -12,9 +12,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,12 +21,14 @@ import java.util.List;
 @RequestMapping("/api/v1/feeds")
 public class FeedController {
 
-    @Autowired
-    private FeedService feedService;
+    private final FeedService feedService;
 
+    public FeedController(FeedService feedService) {
+        this.feedService = feedService;
+    }
     @PostMapping
-    public void createFeed(@RequestBody @Valid FeedCreate request, @PathVariable Long memberId){
-        feedService.write(request, memberId);
+    public void createFeed(@RequestBody @Valid FeedCreate request, Long memberId){
+        feedService.createFeed(request, memberId);
     }
 
 
@@ -40,18 +39,24 @@ public class FeedController {
                     content = {@Content(schema = @Schema(implementation = Feed.class))}),
             @ApiResponse(responseCode = "404", description = "해당 ID의 게시글이 존재하지 않습니다."),
     })
-    public FeedResponse getFeed(@PathVariable Long feedId){
-        return feedService.getFeed(feedId);
+    public FeedResponse getFeed(@PathVariable Long feedId, int size, Long lastCommentId){
+        return feedService.getFeed(feedId, size, lastCommentId);
     }
 
     @GetMapping
-    public List<FeedResponse> getFeeds(@PageableDefault Pageable pageable){
-        return feedService.getFeeds(pageable);
+    public List<Feed> findMoreFeeds(@RequestParam int size, Long lastFeedId){
+        return feedService.findMoreFeeds(size, lastFeedId);
     }
+
+    @GetMapping("/myFeeds/{memberId}")
+    public List<Feed> getMyFeeds(@RequestParam int size, @PathVariable Long memberId){
+        return feedService.getMyFeeds(size,memberId);
+    }
+
 
     @PatchMapping("/{feedId}")
     public void editFeed(@PathVariable Long feedId, @RequestBody @Valid FeedEdit request) {
-        feedService.feedEdit(feedId, request);
+        feedService.editFeed(feedId, request);
     }
 
     @DeleteMapping("/{feedId}")

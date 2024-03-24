@@ -7,6 +7,9 @@ import com.luke.palebluedot.request.MemberEdit;
 import com.luke.palebluedot.response.MemberResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -16,18 +19,18 @@ public class MemberService {
     public MemberService(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
     }
-
+    @Transactional
     public void createMember(MemberCreate memberCreate){
         Member member = Member.builder()
-                .memberId(memberCreate.getMemberId())
                 .password(memberCreate.getPassword())
                 .memberName(memberCreate.getMemberName())
                 .email(memberCreate.getEmail())
                 .build();
+        memberRepository.save(member);
     }
-
-    public MemberResponse getMember(Long memberId) {
-        Member member = memberRepository.findById(memberId)
+    @Transactional(readOnly = true)
+    public MemberResponse getMember(String memberName) {
+        Member member = memberRepository.findByMemberName(memberName)
                 .orElseThrow(()->new IllegalArgumentException("회원정보가 없습니다."));
 
         return MemberResponse.builder()
@@ -37,13 +40,22 @@ public class MemberService {
                 .build();
     }
 
-
-    public void editMember(Long memberId, MemberEdit memberEdit) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(()->new IllegalArgumentException("아이디가 없습니다."));
+    @Transactional
+    public void editMember(String memberName, MemberEdit memberEdit) {
+        Optional<Member> searchMember = memberRepository.findByMemberName(memberName);
+        if(searchMember.isPresent()){
+            Member changedMember = Member.builder()
+                    .memberName(memberEdit.getMemberName())
+                    .password(memberEdit.getPassword())
+                    .email(memberEdit.getEmail())
+                    .build();
+            memberRepository.save(changedMember);
+        }else{
+            throw new  IllegalArgumentException("회원정보가 없습니다.");
+        }
     }
-
-    public void deleteMember(Long memberId) {
-        memberRepository.deleteById(memberId);
+    @Transactional
+    public void deleteMember(String memberName) {
+        memberRepository.deleteByMemberName(memberName);
     }
 }
