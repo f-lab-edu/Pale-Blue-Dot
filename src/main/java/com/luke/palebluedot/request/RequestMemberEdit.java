@@ -17,7 +17,7 @@ public class RequestMemberEdit {
         this.email = email;
     }
 
-    public RequestMemberEdit toDTO(Member entity){
+    public static RequestMemberEdit toDTO(Member entity){
         return RequestMemberEdit.builder()
                 .password(entity.getPassword())
                 .memberName(entity.getMemberName())

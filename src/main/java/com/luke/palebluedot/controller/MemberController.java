@@ -19,7 +19,7 @@ public class MemberController {
     private MemberService memberService;
 
     @PostMapping
-    public ResponseEntity<Member> createMember(@RequestBody @Valid RequestMemberCreate request) {
+    public ResponseEntity<RequestMemberCreate> createMember(@RequestBody @Valid RequestMemberCreate request) {
         return ResponseEntity.ok(memberService.createMember(request));
     }
 
@@ -30,7 +30,7 @@ public class MemberController {
 
 
     @PatchMapping("/{memberId}")
-    public ResponseEntity<Member> editMember(@PathVariable Long memberId, @RequestBody @Valid RequestMemberEdit request) {
+    public ResponseEntity<RequestMemberEdit> editMember(@PathVariable Long memberId, @RequestBody @Valid RequestMemberEdit request) {
         return ResponseEntity.ok(memberService.editMember(memberId, request));
     }
 
