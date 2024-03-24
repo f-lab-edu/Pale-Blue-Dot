@@ -7,8 +7,8 @@ import com.luke.palebluedot.domain.Member;
 import com.luke.palebluedot.repository.CommentRepository;
 import com.luke.palebluedot.repository.FeedRepository;
 import com.luke.palebluedot.repository.MemberRepository;
-import com.luke.palebluedot.request.FeedCreate;
-import com.luke.palebluedot.request.FeedEdit;
+import com.luke.palebluedot.request.FeedCreateRequest;
+import com.luke.palebluedot.request.FeedEditRequest;
 import com.luke.palebluedot.response.FeedResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -36,7 +36,7 @@ public class FeedService {
     }
 
     @Transactional
-    public void createFeed(FeedCreate feedCreate, Long memberId, List<MultipartFile> files) throws IOException {
+    public FeedCreateRequest createFeed(FeedCreateRequest feedCreateRequest, Long memberId, List<MultipartFile> files) throws IOException {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(()->new IllegalArgumentException("회원 정보가 없습니다."));
 
@@ -47,13 +47,10 @@ public class FeedService {
                 feedImageList.add(feedImage);
             }
         }
-        Feed feed = Feed.builder()
-                .feedContent(feedCreate.getContent())
-                .member(member)
-                .feedImages(feedImageList)
-                .build();
-        feedRepository.save(feed);
 
+        Feed feed = FeedCreateRequest.toEntity(feedCreateRequest, member, feedImageList);
+        Feed savedFeed = feedRepository.save(feed);
+        return FeedCreateRequest.toDTO(savedFeed);
     }
     @Transactional(readOnly=true)
     public FeedResponse getFeed(Long feedId, int size,Long lastCommentId) {
@@ -79,15 +76,12 @@ public class FeedService {
     }
 
     @Transactional
-    public void editFeed(Long feedId, FeedEdit feedEdit){
+    public FeedEditRequest editFeed(Long feedId, FeedEditRequest feedEditRequest){
         Feed existFeed = feedRepository.findById(feedId)
                 .orElseThrow(() -> new IllegalArgumentException("피드가 존재하지 않습니다."));
 
-        existFeed = Feed.builder()
-                .feedContent(feedEdit.getContent())
-                .build();
-        feedRepository.save(existFeed);
-
+        existFeed.update(feedEditRequest);
+        return FeedEditRequest.toDTO(existFeed);
     }
     @Transactional
     public void deleteFeed(Long feedId) {

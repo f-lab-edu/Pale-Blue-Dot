@@ -1,5 +1,6 @@
 package com.luke.palebluedot.controller;
 
+import com.luke.palebluedot.request.FeedCreateRequest;
 import com.luke.palebluedot.request.MemberCreateRequest;
 import com.luke.palebluedot.request.MemberEditRequest;
 import com.luke.palebluedot.response.MemberResponse;
@@ -23,8 +24,8 @@ public class MemberController {
     }
 
     @GetMapping("/{memberId}")
-    public MemberResponse getMember(@PathVariable Long memberId) {
-        return memberService.getMember(memberId);
+    public ResponseEntity<MemberResponse> getMember(@PathVariable Long memberId) {
+        return ResponseEntity.ok(memberService.getMember(memberId));
     }
 
 

@@ -1,5 +1,6 @@
 package com.luke.palebluedot.domain;
 
+import com.luke.palebluedot.request.FeedEditRequest;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -58,5 +59,10 @@ public class Feed {
         this.member = member;
         this.comments = comments;
         this.feedImages = feedImages;
+    }
+
+    public void update(FeedEditRequest feedEditRequest) {
+        this.feedContent = feedEditRequest.getContent();
+        this.feedImages = feedEditRequest.getFeedImages();
     }
 }
