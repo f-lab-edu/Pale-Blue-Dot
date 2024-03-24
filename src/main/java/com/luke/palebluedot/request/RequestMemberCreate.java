@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class MemberCreate {
+public class RequestMemberCreate {
     @NotBlank(message = "비밀번호를 입력해주세요")
     private final String password;
     @NotBlank(message = "계정이름을 입력해주세요")
@@ -15,16 +15,24 @@ public class MemberCreate {
     private final String email;
 
     @Builder
-    public MemberCreate(String password, String memberName, String email) {
+    public RequestMemberCreate(String password, String memberName, String email) {
         this.password = password;
         this.memberName = memberName;
         this.email = email;
     }
-    public MemberCreate toDTO(Member entity){
-        return MemberCreate.builder()
+    public static RequestMemberCreate toDTO(Member entity){
+        return RequestMemberCreate.builder()
                 .password(entity.getPassword())
                 .memberName(entity.getMemberName())
                 .email(entity.getEmail())
+                .build();
+    }
+
+    public static Member toEntity(RequestMemberCreate dto){
+        return Member.builder()
+                .password(dto.getPassword())
+                .email(dto.getEmail())
+                .memberName(dto.getMemberName())
                 .build();
     }
 

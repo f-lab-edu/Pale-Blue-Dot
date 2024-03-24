@@ -1,6 +1,7 @@
 package com.luke.palebluedot.domain;
 
-import com.luke.palebluedot.request.MemberEdit;
+import com.luke.palebluedot.request.RequestMemberCreate;
+import com.luke.palebluedot.request.RequestMemberEdit;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -55,7 +56,7 @@ public class Member {
         this.feeds = feeds;
     }
 
-    public void update(MemberEdit dto){
+    public void update(RequestMemberEdit dto){
         this.password = dto.getPassword();
         this.memberName = dto.getMemberName();
         this.email = dto.getEmail();

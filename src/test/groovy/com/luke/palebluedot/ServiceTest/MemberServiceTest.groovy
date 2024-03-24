@@ -2,12 +2,14 @@ package com.luke.palebluedot.ServiceTest
 
 import com.luke.palebluedot.domain.Member
 import com.luke.palebluedot.repository.MemberRepository
-import com.luke.palebluedot.request.MemberCreate
-import com.luke.palebluedot.request.MemberEdit
+import com.luke.palebluedot.request.RequestMemberCreate
+import com.luke.palebluedot.request.RequestMemberEdit
 import com.luke.palebluedot.service.MemberService
 import spock.lang.Specification
 
+
 public class MemberServiceTest extends Specification {
+
     MemberRepository memberRepository = Mock()
     MemberService memberService = new MemberService(memberRepository)
 
@@ -25,10 +27,11 @@ public class MemberServiceTest extends Specification {
     def "createMember - 정상작동확인"(){
         given:
         Long memberId = 1L
-        MemberCreate joinMember = createMember(memberId)
+        Member joinMember = createMember(memberId)
+        RequestMemberCreate reMember = RequestMemberCreate.toDTO(joinMember)
 
         when:
-        memberService.createMember(joinMember)
+        memberService.createMember(reMember)
 
         then:
         1*memberRepository.save(_) >> {args ->
@@ -44,7 +47,7 @@ public class MemberServiceTest extends Specification {
         memberRepository.findById(memberId) >> Optional.of(existMember)
         memberRepository.save(_ as Member) >> { Member savedMember -> savedMember }
 
-        MemberEdit memberEdit = MemberEdit.builder()
+        RequestMemberEdit memberEdit = RequestMemberEdit.builder()
             .memberName("editname")
             .email("editmail")
             .password("editpassword")

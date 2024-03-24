@@ -2,8 +2,8 @@ package com.luke.palebluedot.service;
 
 import com.luke.palebluedot.domain.Member;
 import com.luke.palebluedot.repository.MemberRepository;
-import com.luke.palebluedot.request.MemberCreate;
-import com.luke.palebluedot.request.MemberEdit;
+import com.luke.palebluedot.request.RequestMemberCreate;
+import com.luke.palebluedot.request.RequestMemberEdit;
 import com.luke.palebluedot.response.MemberResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,8 +18,8 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
     @Transactional
-    public Member createMember(MemberCreate memberCreate){
-        Member member = Member.toEntity(memberCreate);
+    public Member createMember(RequestMemberCreate requestMemberCreate){
+        Member member = requestMemberCreate.toEntity(requestMemberCreate);
         return memberRepository.save(member);
     }
     @Transactional(readOnly = true)
@@ -35,12 +35,12 @@ public class MemberService {
     }
 
     @Transactional
-    public Member editMember(Long memberId, MemberEdit memberEdit) {
+    public Member editMember(Long memberId, RequestMemberEdit requestMemberEdit) {
         Member existMember = memberRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException("회원이 존재하지 않습니다."));
-        Member.toEntity(memberEdit);
+        existMember.update(requestMemberEdit);
         return existMember;
     }
-    @Transactional
+    @Transactional(readOnly=true)
     public void deleteMember(Long memberId) {
         memberRepository.deleteById(memberId);
     }

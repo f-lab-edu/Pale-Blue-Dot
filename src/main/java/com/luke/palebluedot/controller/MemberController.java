@@ -1,8 +1,8 @@
 package com.luke.palebluedot.controller;
 
 import com.luke.palebluedot.domain.Member;
-import com.luke.palebluedot.request.MemberCreate;
-import com.luke.palebluedot.request.MemberEdit;
+import com.luke.palebluedot.request.RequestMemberCreate;
+import com.luke.palebluedot.request.RequestMemberEdit;
 import com.luke.palebluedot.response.MemberResponse;
 import com.luke.palebluedot.service.MemberService;
 import jakarta.validation.Valid;
@@ -19,7 +19,7 @@ public class MemberController {
     private MemberService memberService;
 
     @PostMapping
-    public ResponseEntity<Member> createMember(@RequestBody @Valid MemberCreate request) {
+    public ResponseEntity<Member> createMember(@RequestBody @Valid RequestMemberCreate request) {
         return ResponseEntity.ok(memberService.createMember(request));
     }
 
@@ -30,7 +30,7 @@ public class MemberController {
 
 
     @PatchMapping("/{memberId}")
-    public ResponseEntity<Member> editMember(@PathVariable Long memberId, @RequestBody @Valid MemberEdit request) {
+    public ResponseEntity<Member> editMember(@PathVariable Long memberId, @RequestBody @Valid RequestMemberEdit request) {
         return ResponseEntity.ok(memberService.editMember(memberId, request));
     }
 
