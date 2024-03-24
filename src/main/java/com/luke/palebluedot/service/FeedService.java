@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class FeedService {
     }
 
     @Transactional
-    public void createFeed(FeedCreate feedCreate, Long memberId, List<MultipartFile> files) {
+    public void createFeed(FeedCreate feedCreate, Long memberId, List<MultipartFile> files) throws IOException {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(()->new IllegalArgumentException("회원 정보가 없습니다."));
 
@@ -54,8 +55,8 @@ public class FeedService {
         feedRepository.save(feed);
 
     }
-    @Transactional(readOnly = true)
-    public FeedResponse getFeed(Long feedId, int size, Long lastCommentId) {
+    @Transactional(readOnly=true)
+    public FeedResponse getFeed(Long feedId, int size,Long lastCommentId) {
         Feed existfeed = feedRepository.findById(feedId)
                 .orElseThrow(()->new IllegalArgumentException("게시글이 없습니다."));
 
@@ -82,9 +83,9 @@ public class FeedService {
         Feed existFeed = feedRepository.findById(feedId)
                 .orElseThrow(() -> new IllegalArgumentException("피드가 존재하지 않습니다."));
 
-        /*existFeed = Feed.builder()
+        existFeed = Feed.builder()
                 .feedContent(feedEdit.getContent())
-                .build();*/
+                .build();
         feedRepository.save(existFeed);
 
     }

@@ -23,3 +23,6 @@ spring:
 logging:
   level:
     org.hibernate.SQL: debug
+
+feedImage:
+  path: "D:\\dev\\flab\\project\\feedImage"

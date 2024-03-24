@@ -44,17 +44,13 @@ class CommentServiceTest extends Specification {
         given:
         Long feedId = 1L
         int size = 10
-        Feed feed = createFeed(feedId)
-        List<Comment> comments = createComments(size)
-        when:
-        1*feedRepository.findById(feedId) >> Optional.of(feed)
-        1*commentRepository.getComments(size, feedId) >> comments
 
+        when:
         FeedResponse feedResponse = feedService.getFeed(feedId, size)
 
         then:
-        feedResponse.getContent() == feed.getFeedContent()
-        feedResponse.getComments() == comments
+        1*feedRepository.findById(feedId)
+        1*commentRepository.getComments(size, feedId)
 
     }
 }

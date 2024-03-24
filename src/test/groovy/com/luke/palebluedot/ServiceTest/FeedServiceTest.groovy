@@ -6,6 +6,7 @@ import com.luke.palebluedot.repository.CommentRepository
 import com.luke.palebluedot.repository.FeedRepository
 import com.luke.palebluedot.repository.MemberRepository
 import com.luke.palebluedot.response.FeedResponse
+import com.luke.palebluedot.service.FeedImageService
 import com.luke.palebluedot.service.FeedService
 import spock.lang.Specification
 
@@ -15,8 +16,9 @@ class FeedServiceTest extends Specification {
     FeedRepository feedRepository = Mock()
     MemberRepository memberRepository = Mock()
     CommentRepository commentRepository = Mock()
+    FeedImageService feedImageService = Mock()
 
-    FeedService feedService = new FeedService(feedRepository, memberRepository, commentRepository)
+    FeedService feedService = new FeedService(feedRepository, memberRepository, commentRepository, feedImageService)
 
     def cleanup() {
         feedRepository.deleteAll()
@@ -41,7 +43,7 @@ class FeedServiceTest extends Specification {
         when:
         1*feedRepository.findById(feedId) >> Optional.of(feed)
 
-        FeedResponse feedResponse = feedService.getFeed(feedId, size)
+        FeedResponse feedResponse = feedService.getFeed(feedId, size, 1L)
 
         then:
         feedResponse.getContent() == feed.getFeedContent()
@@ -57,7 +59,7 @@ class FeedServiceTest extends Specification {
     def "findMoreFeeds - 성공시 피드 리스트 조회 확인"(){
         given:
         int size = 5
-        Long lastFeedId = 6L
+        Long lastFeedId = 5L
 
         when:
         feedService.findMoreFeeds(size, lastFeedId)

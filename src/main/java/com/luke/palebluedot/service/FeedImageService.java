@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
+import java.util.UUID;
 
 
 @Slf4j
@@ -17,19 +19,20 @@ import java.time.LocalDate;
 public class FeedImageService {
 
     private final FeedImageRepository feedImageRepository;
-
     public FeedImageService(FeedImageRepository feedImageRepository) {
         this.feedImageRepository = feedImageRepository;
     }
 
-    @Value("${feedImage.fileDir}")
+    @Value("${feedImage.path}")
     private String fileUploadDir;
 
-    public FeedImage uploadFile(MultipartFile file, Long memberId) {
+    public FeedImage uploadFile(MultipartFile file, Long memberId) throws IOException {
+        UUID uuid = UUID.randomUUID();
+        String fileName = uuid.toString();
         String currentDate = LocalDate.now().toString();
-        String filePath = fileUploadDir + File.separator + memberId + File.separator + currentDate;
+        String filePath = fileUploadDir + File.separator + memberId + File.separator + currentDate + File.separator + fileName;
 
-        /*실제 파일 저장 로직 - 현재 생략*/
+        file.transferTo(new File(filePath));
 
         FeedImage feedImage = FeedImage.builder()
                 .filePath(filePath)
