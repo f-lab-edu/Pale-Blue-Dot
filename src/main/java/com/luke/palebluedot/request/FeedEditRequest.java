@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 public class FeedEditRequest {
     private final String content;
-    private List<FeedImage> feedImages;
+    private final List<FeedImage> feedImages;
 
     @Builder
     public FeedEditRequest(String content, List<FeedImage> feedImages) {

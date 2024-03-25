@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,8 +29,8 @@ public class FeedController {
         this.feedService = feedService;
     }
     @PostMapping
-    public ResponseEntity<FeedCreateRequest> createFeed(@RequestBody @Valid FeedCreateRequest request, Long memberId, List<MultipartFile> files) throws IOException {
-        return ResponseEntity.ok(feedService.createFeed(request, memberId, files));
+    public FeedCreateRequest createFeed(@RequestBody @Valid FeedCreateRequest request, Long memberId, List<MultipartFile> files) throws IOException {
+        return feedService.createFeed(request, memberId, files);
     }
 
 
@@ -42,24 +41,24 @@ public class FeedController {
                     content = {@Content(schema = @Schema(implementation = Feed.class))}),
             @ApiResponse(responseCode = "404", description = "해당 ID의 게시글이 존재하지 않습니다."),
     })
-    public ResponseEntity<FeedResponse> getFeed(@PathVariable Long feedId, @RequestParam int size, @RequestBody Long lastCommentId){
-        return ResponseEntity.ok(feedService.getFeed(feedId, size, lastCommentId));
+    public FeedResponse getFeed(@PathVariable Long feedId, @RequestParam int size, @RequestBody Long lastCommentId){
+        return feedService.getFeed(feedId, size, lastCommentId);
     }
 
     @GetMapping
-    public ResponseEntity<List<Feed>> findMoreFeeds(@RequestParam int size, Long lastFeedId){
-        return ResponseEntity.ok(feedService.findMoreFeeds(size, lastFeedId));
+    public List<Feed> findMoreFeeds(@RequestParam int size, Long lastFeedId){
+        return feedService.findMoreFeeds(size, lastFeedId);
     }
 
     @GetMapping("/myFeeds/{memberId}")
-    public ResponseEntity<List<Feed>> getMyFeeds(@RequestParam int size, @PathVariable Long memberId){
-        return ResponseEntity.ok(feedService.getMyFeeds(size, memberId));
+    public List<Feed> getMyFeeds(@RequestParam int size, @PathVariable Long memberId){
+        return feedService.getMyFeeds(size, memberId);
     }
 
 
     @PatchMapping("/{feedId}")
-    public ResponseEntity<FeedEditRequest> editFeed(@PathVariable Long feedId, @RequestBody @Valid FeedEditRequest request) {
-        return ResponseEntity.ok(feedService.editFeed(feedId, request));
+    public FeedEditRequest editFeed(@PathVariable Long feedId, @RequestBody @Valid FeedEditRequest request) {
+        return feedService.editFeed(feedId, request);
     }
 
     @DeleteMapping("/{feedId}")
