@@ -36,14 +36,14 @@ public class FeedService {
     }
 
     @Transactional
-    public FeedCreateRequest createFeed(FeedCreateRequest feedCreateRequest, Long memberId, List<MultipartFile> files) throws IOException {
-        Member member = memberRepository.findById(memberId)
+    public FeedCreateRequest createFeed(FeedCreateRequest feedCreateRequest, List<MultipartFile> files) throws IOException {
+        Member member = memberRepository.findById(feedCreateRequest.getMember().getMemberId())
                 .orElseThrow(()->new IllegalArgumentException("회원 정보가 없습니다."));
 
         List<FeedImage> feedImageList = new ArrayList<>();
         if(files != null && !files.isEmpty()){
             for(MultipartFile uploadedFile : files){
-                FeedImage feedImage = feedImageService.uploadFile(uploadedFile, memberId);
+                FeedImage feedImage = feedImageService.uploadFile(uploadedFile, feedCreateRequest.getMember().getMemberId());
                 feedImageList.add(feedImage);
             }
         }

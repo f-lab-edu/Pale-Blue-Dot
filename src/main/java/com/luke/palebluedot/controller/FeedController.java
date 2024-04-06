@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,9 +29,9 @@ public class FeedController {
     public FeedController(FeedService feedService) {
         this.feedService = feedService;
     }
-    @PostMapping
-    public FeedCreateRequest createFeed(@RequestBody @Valid FeedCreateRequest request, Long memberId, List<MultipartFile> files) throws IOException {
-        return feedService.createFeed(request, memberId, files);
+    @PostMapping(value = "", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public FeedCreateRequest createFeed(@RequestPart FeedCreateRequest request, @RequestPart List<MultipartFile> files) throws IOException {
+        return feedService.createFeed(request,files);
     }
 
 

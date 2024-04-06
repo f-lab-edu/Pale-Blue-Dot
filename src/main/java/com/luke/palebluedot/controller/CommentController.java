@@ -17,8 +17,8 @@ public class CommentController {
     }
 
     @PostMapping
-    public void createComment(@RequestBody CommentCreate request, Long feedId, Long memberId){
-        commentService.createComment(request, feedId, memberId);
+    public void createComment(@RequestBody CommentCreate request){
+        commentService.createComment(request);
     }
 
 }
