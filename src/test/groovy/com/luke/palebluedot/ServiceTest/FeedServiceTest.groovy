@@ -46,7 +46,7 @@ class FeedServiceTest extends Specification {
         FeedResponse feedResponse = feedService.getFeed(feedId, size, 1L)
 
         then:
-        feedResponse.getContent() == feed.getFeedContent()
+        feedResponse.getFeedContent() == feed.getFeedContent()
 
     }
     def createFeeds(int size){

@@ -20,15 +20,8 @@ public class MemberCreateRequest {
         this.memberName = memberName;
         this.email = email;
     }
-    public static MemberCreateRequest toDTO(Member entity){
-        return MemberCreateRequest.builder()
-                .password(entity.getPassword())
-                .memberName(entity.getMemberName())
-                .email(entity.getEmail())
-                .build();
-    }
 
-    public static Member toEntity(MemberCreateRequest dto){
+    public static Member of(MemberCreateRequest dto){
         return Member.builder()
                 .password(dto.getPassword())
                 .email(dto.getEmail())

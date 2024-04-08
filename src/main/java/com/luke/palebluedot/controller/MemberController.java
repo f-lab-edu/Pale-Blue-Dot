@@ -17,7 +17,7 @@ public class MemberController {
     private MemberService memberService;
 
     @PostMapping
-    public MemberCreateRequest createMember(@RequestBody @Valid MemberCreateRequest request) {
+    public MemberResponse createMember(@RequestBody @Valid MemberCreateRequest request) {
         return memberService.createMember(request);
     }
 
@@ -28,7 +28,7 @@ public class MemberController {
 
 
     @PatchMapping("/{memberId}")
-    public MemberEditRequest editMember(@PathVariable Long memberId, @RequestBody @Valid MemberEditRequest request) {
+    public MemberResponse editMember(@PathVariable Long memberId, @RequestBody @Valid MemberEditRequest request) {
         return memberService.editMember(memberId, request);
     }
 

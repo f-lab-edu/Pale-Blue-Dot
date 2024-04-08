@@ -1,6 +1,5 @@
 package com.luke.palebluedot.request;
 
-import com.luke.palebluedot.domain.Feed;
 import com.luke.palebluedot.domain.FeedImage;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,11 +17,5 @@ public class FeedEditRequest {
         this.feedImages = feedImages;
     }
 
-    public static FeedEditRequest toDTO(Feed entity) {
-        return FeedEditRequest.builder()
-                .content(entity.getFeedContent())
-                .feedImages(entity.getFeedImages())
-                .build();
-    }
 
 }

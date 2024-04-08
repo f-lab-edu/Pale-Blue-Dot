@@ -36,7 +36,7 @@ public class FeedService {
     }
 
     @Transactional
-    public FeedCreateRequest createFeed(FeedCreateRequest feedCreateRequest, List<MultipartFile> files) throws IOException {
+    public FeedResponse createFeed(FeedCreateRequest feedCreateRequest, List<MultipartFile> files) throws IOException {
         Member member = memberRepository.findById(feedCreateRequest.getMember().getMemberId())
                 .orElseThrow(()->new IllegalArgumentException("회원 정보가 없습니다."));
 
@@ -46,11 +46,13 @@ public class FeedService {
                 FeedImage feedImage = feedImageService.uploadFile(uploadedFile, feedCreateRequest.getMember().getMemberId());
                 feedImageList.add(feedImage);
             }
+        }else{
+            throw new IllegalArgumentException("이미지를 업로드 해주세요");
         }
 
-        Feed feed = FeedCreateRequest.toEntity(feedCreateRequest, member, feedImageList);
+        Feed feed = FeedCreateRequest.of(feedCreateRequest, member, feedImageList);
         Feed savedFeed = feedRepository.save(feed);
-        return FeedCreateRequest.toDTO(savedFeed);
+        return FeedResponse.from(savedFeed);
     }
     @Transactional(readOnly=true)
     public FeedResponse getFeed(Long feedId, int size,Long lastCommentId) {
@@ -60,7 +62,7 @@ public class FeedService {
         List<Comment> comments = commentRepository.getComments(size, feedId, lastCommentId);
 
         return FeedResponse.builder()
-                .content(existfeed.getFeedContent())
+                .feedContent(existfeed.getFeedContent())
                 .comments(comments)
                 .build();
 
@@ -76,12 +78,12 @@ public class FeedService {
     }
 
     @Transactional
-    public FeedEditRequest editFeed(Long feedId, FeedEditRequest feedEditRequest){
+    public FeedResponse editFeed(Long feedId, FeedEditRequest feedEditRequest){
         Feed existFeed = feedRepository.findById(feedId)
                 .orElseThrow(() -> new IllegalArgumentException("피드가 존재하지 않습니다."));
 
         existFeed.update(feedEditRequest);
-        return FeedEditRequest.toDTO(existFeed);
+        return FeedResponse.from(existFeed);
     }
     @Transactional
     public void deleteFeed(Long feedId) {

@@ -30,7 +30,7 @@ public class FeedController {
         this.feedService = feedService;
     }
     @PostMapping(value = "", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public FeedCreateRequest createFeed(@RequestPart FeedCreateRequest request, @RequestPart List<MultipartFile> files) throws IOException {
+    public FeedResponse createFeed(@RequestPart FeedCreateRequest request, @RequestPart List<MultipartFile> files) throws IOException {
         return feedService.createFeed(request,files);
     }
 
@@ -58,7 +58,7 @@ public class FeedController {
 
 
     @PatchMapping("/{feedId}")
-    public FeedEditRequest editFeed(@PathVariable Long feedId, @RequestBody @Valid FeedEditRequest request) {
+    public FeedResponse editFeed(@PathVariable Long feedId, @RequestBody @Valid FeedEditRequest request) {
         return feedService.editFeed(feedId, request);
     }
 

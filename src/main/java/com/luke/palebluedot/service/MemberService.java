@@ -18,10 +18,10 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
     @Transactional
-    public MemberCreateRequest createMember(MemberCreateRequest memberCreateRequest){
-        Member member = MemberCreateRequest.toEntity(memberCreateRequest);
+    public MemberResponse createMember(MemberCreateRequest memberCreateRequest){
+        Member member = MemberCreateRequest.of(memberCreateRequest);
         Member savedMember = memberRepository.save(member);
-        return MemberCreateRequest.toDTO(savedMember);
+        return MemberResponse.from(savedMember);
     }
     @Transactional(readOnly = true)
     public MemberResponse getMember(Long memberId) {
@@ -36,10 +36,10 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberEditRequest editMember(Long memberId, MemberEditRequest memberEditRequest) {
+    public MemberResponse editMember(Long memberId, MemberEditRequest memberEditRequest) {
         Member existMember = memberRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException("회원이 존재하지 않습니다."));
         existMember.update(memberEditRequest);
-        return MemberEditRequest.toDTO(existMember);
+        return MemberResponse.from(existMember);
     }
     @Transactional(readOnly=true)
     public void deleteMember(Long memberId) {

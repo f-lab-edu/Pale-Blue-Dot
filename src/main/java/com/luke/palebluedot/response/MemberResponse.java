@@ -1,5 +1,6 @@
 package com.luke.palebluedot.response;
 
+import com.luke.palebluedot.domain.Member;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -15,5 +16,11 @@ public class MemberResponse {
         this.memberId = memberId;
         this.memberName = memberName;
         this.email = email;
+    }
+
+    public static MemberResponse from(Member entity){
+        return MemberResponse.builder()
+                .memberId(entity.getMemberId())
+                .build();
     }
 }
