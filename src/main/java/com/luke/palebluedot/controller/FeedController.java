@@ -42,12 +42,12 @@ public class FeedController {
                     content = {@Content(schema = @Schema(implementation = Feed.class))}),
             @ApiResponse(responseCode = "404", description = "해당 ID의 게시글이 존재하지 않습니다."),
     })
-    public FeedResponse getFeed(@PathVariable Long feedId, @RequestParam int size, @RequestBody Long lastCommentId){
+    public FeedResponse getFeed(@PathVariable Long feedId, @RequestParam int size, @RequestParam Long lastCommentId){
         return feedService.getFeed(feedId, size, lastCommentId);
     }
 
     @GetMapping
-    public List<Feed> findMoreFeeds(@RequestParam int size, Long lastFeedId){
+    public List<Feed> findMoreFeeds(@RequestParam int size, @RequestParam Long lastFeedId){
         return feedService.findMoreFeeds(size, lastFeedId);
     }
 
